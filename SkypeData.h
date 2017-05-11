@@ -41,14 +41,18 @@ public:
 private:
 	friend class SkypeData;
 
-	string name;
+	//FIXME: DELETE
+	//variables with "//" are done
+	string name; //
 	vector<csvstream::row_type> rows;
 	int num_posts; // = rows.size();
 	int num_edits;
+
 	map<string, int> vocabulary_count; //unique word frequencies
 	int word_count; //total words, non unique
 	int vocab_size; //number of unique words, = vocabulary_count.size()
 	int bad_words_count;
 	int punctuation_count;
+	int link_count;
 	int skype_emoji_count;
 };

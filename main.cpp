@@ -35,6 +35,7 @@ rapidxml*.hpp: http://rapidxml.sourceforge.net/, http://rapidxml.sourceforge.net
 #include <iostream>
 #include <cstdlib>
 #include <vector>
+#include <fstream>
 
 using std::string;
 using std::cout;
@@ -53,10 +54,17 @@ int main(int argc, char** argv) {
 
 	
 	xml_document<> doc;
+	
+	//use this one to 
+	csvstream skype_data_with_xml("skype_data.csv");
+	csvstream skype_data_parsed("skype_data_parsed.csv");
 
+	string xml_text;
+	string parsed_text;
 
-	csvstream skype_data("skype_data_parsed.csv");
+	//ifstream file_with_xml("")
 
+	//doc.parse<>(test_c);
 
 	//open "negative_words.txt"
 	//open "positive_words.txt"

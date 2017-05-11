@@ -49,5 +49,6 @@
     <Text Include="bad_words.txt" />
     <Text Include="negative_words.txt" />
     <Text Include="positive_words.txt" />
+    <Text Include="skype_emojis.txt" />
   </ItemGroup>
 </Project>

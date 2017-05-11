@@ -28,7 +28,7 @@ EFFECTS:
 SkypeData::SkypeData(csvstream& csv_data) {
 	csvstream::row_type row;
 
-	bool new_name;
+	//bool new_name;
 	int user_data_index = -1;
 
 	//read in all rows from csv_data, and temporarily store data in row
@@ -108,4 +108,5 @@ SkypeData::~SkypeData() {
 ////////UserData////////////////////////
 ////////////////////////////////////////
 UserSkypeData::UserSkypeData(const string& name_in)
-	: name(name_in), num_posts(0), num_edits(0), word_count(0), vocab_size(0) {}
+	: name(name_in), num_posts(0), num_edits(0), word_count(0), vocab_size(0),
+	bad_words_count(0), punctuation_count(0), skype_emoji_count(0) {}
