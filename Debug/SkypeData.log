@@ -1,0 +1,7 @@
+﻿  SkypeData.cpp
+c:\users\andrius\documents\andrius\selfprojects\skypedata\skypedata\skypedata.cpp(42): warning C4101: 'new_name': unreferenced local variable
+  Generating Code...
+  Skipping... (no relevant changes detected)
+  main.cpp
+  SkypeData.vcxproj -> C:\Users\Andrius\Documents\Andrius\SelfProjects\SkypeData\Debug\SkypeData.exe
+  SkypeData.vcxproj -> C:\Users\Andrius\Documents\Andrius\SelfProjects\SkypeData\Debug\SkypeData.pdb (Partial PDB)
