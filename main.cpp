@@ -43,6 +43,8 @@ using std::map;
 using std::set;
 using std::vector;
 using rapidxml::xml_document;
+using rapidxml::xml_node;
+using std::ifstream;
 
 //http://www.sqlapi.com/ use this to get sql into this program so that only the .db file has to be used
 //https://www.tutorialspoint.com/sqlite/sqlite_c_cpp.htm THIS ONE LOOKS BETTER
@@ -54,6 +56,9 @@ int main(int argc, char** argv) {
 
 	
 	xml_document<> doc;
+	xml_node<> * root_node;
+	ifstream my_skype_data("skype_data.csv");
+	
 	
 	//use this one to 
 	csvstream skype_data_with_xml("skype_data.csv");
@@ -104,3 +109,56 @@ int main(int argc, char** argv) {
 	return 0;
 }
 
+
+
+
+
+/*
+Skype xml formatting:
+-messages with xml formatting all begin with double quotes
+	-if the message does not begin with double quotes, 
+	the message is in plain text
+-xml special characters: &lt; (<), &amp; (&), &gt; (>), &quot; ("), and &apos; (').
+*/
+
+string XMLToStringConverter(const string& xml) {
+	if (xml[0] != '"') return xml;
+
+
+}
+
+
+
+//FIXME, WRITE TEST CASES
+string XMLSpecialCharToString(const string& xml_word) {
+	vector<string> xml_special_chars = { "&lt;", "&amp;", "&gt;", "&quot;", "&apos;" };
+	
+	string parsed_word = xml_word;
+
+	//check word for all special characters
+	for (const string& special_char : xml_special_chars) {
+		size_t pos = parsed_word.find(special_char);
+		//loop until all occurrences are found
+		while (pos != parsed_word.npos) { 
+			if (special_char == "&lt;") {
+				parsed_word.replace(pos, pos + 4, "<");
+			}
+			else if (special_char == "&amp;") {
+				parsed_word.replace(pos, pos + 5, "&");
+			}
+			else if (special_char == "&gt;") {
+				parsed_word.replace(pos, pos + 4, ">");
+			}
+			else if (special_char == "&quot;") {
+				parsed_word.replace(pos, pos + 6, "\"");
+			}
+			else if (special_char == "&apos;") {
+				parsed_word.replace(pos, pos + 6, "'");
+			}
+			pos = parsed_word.find(special_char, pos); //try to find next instance in the word
+		}
+	}
+
+
+	return parsed_word;
+}
