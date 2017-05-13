@@ -117,19 +117,50 @@ int main(int argc, char** argv) {
 Skype xml formatting:
 -messages with xml formatting all begin with double quotes
 	-if the message does not begin with double quotes, 
-	the message is in plain text
+	the message is in plain text NOT TRUE
 -xml special characters: &lt; (<), &amp; (&), &gt; (>), &quot; ("), and &apos; (').
+
+FOR THIS FUNCTION, ONLY REMOVE THE TAGS
+SPECIAL CHARACTERS CAN BE DEALT WITH ONCE THE VOCAB TREES ARE ESTABLISHED
+-the xml string will begin with quotes if it has tags
+-xml tags: ss, partlist type, <a href, <URIObject type, <quote author
+	-note: partlist type is a tag that contains nonsense data, so just ignore these messages
+	-note: <URIObject type contains an href type, so search for URIObject first
+	-note: for ss tag, record that user used an emoji and record what kind
+	-note: format for text with a link
+		andrew.lukasiewicz,,"i came out of the womb singing this <a href=""https://www.youtube.com/watch?v=l7KEuKKuuas"">https://www.youtube.com/watch?v=l7KEuKKuuas</a>"
 */
 
 string XMLToStringConverter(const string& xml) {
+	//no xml tags
 	if (xml[0] != '"') return xml;
+	
+	//partlist type
+	if (xml.find("\"<partlist type=\"\"") != xml.npos) return "";
+
+	//<URIObject type
 
 
+	//ss
+
+
+	//a href
+
+
+
+	//string is in quotes, but has no tags
+	return xml;
 }
 
 
 
 //FIXME, WRITE TEST CASES
+/*
+REQUIRES:	xml_word is a single word, with no spaces
+MODIFIES:	null
+EFFECTS:	returns a string based on xml_word, 
+			with all xml special characters replaced by their plain text characters
+*/
 string XMLSpecialCharToString(const string& xml_word) {
 	vector<string> xml_special_chars = { "&lt;", "&amp;", "&gt;", "&quot;", "&apos;" };
 	
@@ -161,4 +192,13 @@ string XMLSpecialCharToString(const string& xml_word) {
 
 
 	return parsed_word;
+}
+
+
+/*
+-Removes quotes
+-if there is a /, treat the string as two words
+*/
+string personalTextFormatter(const string& unformatted_string) {
+
 }
