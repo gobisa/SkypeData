@@ -49,6 +49,7 @@ private:
 	int num_edits;
 
 	map<string, int> vocabulary_count; //unique word frequencies
+	map<string, int> emoji_count; //unique emoji frequencies
 	int word_count; //total words, non unique
 	int vocab_size; //number of unique words, = vocabulary_count.size()
 	int bad_words_count;

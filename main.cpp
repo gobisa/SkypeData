@@ -123,7 +123,7 @@ Skype xml formatting:
 FOR THIS FUNCTION, ONLY REMOVE THE TAGS
 SPECIAL CHARACTERS CAN BE DEALT WITH ONCE THE VOCAB TREES ARE ESTABLISHED
 -the xml string will begin with quotes if it has tags
--xml tags: ss, partlist type, <a href, <URIObject type, <quote author
+-xml tags: <ss, <partlist type, <a href, <URIObject type, <quote author
 	-note: partlist type is a tag that contains nonsense data, so just ignore these messages
 	-note: <URIObject type contains an href type, so search for URIObject first
 	-note: for ss tag, record that user used an emoji and record what kind
@@ -141,7 +141,7 @@ string XMLToStringConverter(const string& xml) {
 	//<URIObject type
 
 
-	//ss
+	//ss (when analyzing the return of this function, if word is in emoji list, add it to both vocabulary and list of emojis)
 
 
 	//a href
