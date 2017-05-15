@@ -36,6 +36,7 @@ rapidxml*.hpp: http://rapidxml.sourceforge.net/, http://rapidxml.sourceforge.net
 #include <cstdlib>
 #include <vector>
 #include <fstream>
+#include <regex>
 
 using std::string;
 using std::cout;
@@ -45,6 +46,7 @@ using std::vector;
 using rapidxml::xml_document;
 using rapidxml::xml_node;
 using std::ifstream;
+using std::regex;
 
 //http://www.sqlapi.com/ use this to get sql into this program so that only the .db file has to be used
 //https://www.tutorialspoint.com/sqlite/sqlite_c_cpp.htm THIS ONE LOOKS BETTER
@@ -123,14 +125,17 @@ Skype xml formatting:
 FOR THIS FUNCTION, ONLY REMOVE THE TAGS
 SPECIAL CHARACTERS CAN BE DEALT WITH ONCE THE VOCAB TREES ARE ESTABLISHED
 -the xml string will begin with quotes if it has tags
+	-if the string has quotes and there are no tags, then the quotes are from the user, and should be removed
 -xml tags: <ss, <partlist type, <a href, <URIObject type, <quote author
 	-note: partlist type is a tag that contains nonsense data, so just ignore these messages
 	-note: <URIObject type contains an href type, so search for URIObject first
+		-URIObject is a file
 	-note: for ss tag, record that user used an emoji and record what kind
 	-note: format for text with a link
 		andrew.lukasiewicz,,"i came out of the womb singing this <a href=""https://www.youtube.com/watch?v=l7KEuKKuuas"">https://www.youtube.com/watch?v=l7KEuKKuuas</a>"
 */
-
+//THIS FUNCTION IS ONLY FOR CONVERTING THE STRING TO TEXT, OTHER ANALYSIS WILL BE DONE BY OTHER FUNCTIONS
+//THIS FUNCTION SHOULD PROBABLY ONLY BE USED FOR COMPUTING VOCABULARY AND WORDCOUNT
 string XMLToStringConverter(const string& xml) {
 	//no xml tags
 	if (xml[0] != '"') return xml;
@@ -139,13 +144,21 @@ string XMLToStringConverter(const string& xml) {
 	if (xml.find("\"<partlist type=\"\"") != xml.npos) return "";
 
 	//<URIObject type
-
+	if (xml.find("\"<URIObject type=\"\"") != xml.npos) return "";
 
 	//ss (when analyzing the return of this function, if word is in emoji list, add it to both vocabulary and list of emojis)
 
 
 	//a href
+	size_t href_pos = xml.find("<a href=\"\"");
+	while (href_pos != xml.npos) {
+		//a href tag is found
 
+		//FIXME, TEST IF WORKING CORRECTLY
+		regex href_format("<a href*>"); //fixme, I need to decide what to do and reformat this
+
+		//count instances of href, could be sending multiple links
+	}
 
 
 	//string is in quotes, but has no tags
