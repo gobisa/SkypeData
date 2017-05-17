@@ -155,7 +155,8 @@ string XMLToStringConverter(const string& xml) {
 		//a href tag is found
 
 		//FIXME, TEST IF WORKING CORRECTLY
-		regex href_format("<a href*>"); //fixme, I need to decide what to do and reformat this
+		regex href_format("(<a href)\\S+(/a>)"); //matches all text between (inclusive) "<a href" and "/a>"
+		//(<a href)\S+(/a>) is the code on regex101, but I think two \ are needed for the S because
 
 		//count instances of href, could be sending multiple links
 	}
