@@ -155,10 +155,17 @@ string XMLToStringConverter(const string& xml) {
 		//a href tag is found
 
 		//FIXME, TEST IF WORKING CORRECTLY
-		regex href_format("(<a href)\\S+(/a>)"); //matches all text between (inclusive) "<a href" and "/a>"
+		regex href_opening_tag("(<a href=)\\S+(\"\">)"); //matches opening href tag, from "<a href=" to '"">'
+		regex href_closing_tag("</a>"); //matches closing href tag, "</a>"
+		regex href_format("(<a href=)\\S+(/a>)"); //matches all text between (inclusive) "<a href=" and "/a>"
 		//(<a href)\S+(/a>) is the code on regex101, but I think two \ are needed for the S because
 
-		//count instances of href, could be sending multiple links
+
+		//http://www.cplusplus.com/reference/regex/
+
+		//size_t href_start = xml.find(
+
+		//count instances of href, could be sending multiple links in one message
 	}
 
 
@@ -210,9 +217,9 @@ string XMLSpecialCharToString(const string& xml_word) {
 
 
 /*
--Removes quotes
+-Removes quotes that the user adds
 -if there is a /, treat the string as two words
 */
 string personalTextFormatter(const string& unformatted_string) {
-
+	return "";
 }
