@@ -71,7 +71,9 @@ SkypeData::SkypeData(csvstream& csv_data) {
 }
 
 
-
+//FIXME
+//CURRENTLY ONLY UPDATES num_posts and num_edits
+//PROBABLY WANT IT TO UPDATE VOCAB AND VOCAB COUNTS
 void SkypeData::update_users_vocabulary_count() {
 
 	for (auto user : user_data) {
@@ -81,10 +83,14 @@ void SkypeData::update_users_vocabulary_count() {
 		//go through every row
 		for (auto row : user->rows) {
 			//update num_edits
-			if (row["edited_by"] != "") {
+			if (row["edited_by"] != "") { //FIXME, MAY NEED TO CHECK IF == user->name?
 				//FIXME, may not work correctly
 				++(user->num_edits);
 			}
+
+
+			//FIXME
+			//UPDATE VOCAB
 		}
 	}
 
