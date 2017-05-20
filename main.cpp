@@ -146,8 +146,21 @@ string XMLToStringConverter(const string& xml) {
 	//<URIObject type
 	if (xml.find("\"<URIObject type=\"\"") != xml.npos) return "";
 
-	//ss (when analyzing the return of this function, if word is in emoji list, add it to both vocabulary and list of emojis)
 
+	string plain_text_string = xml; //use this string to replace things
+
+	//ss (when analyzing the return of this function, if word is in emoji list, add it to both vocabulary and list of emojis)
+	//Example: "Send a message to your Valentine <ss type=""heart"">(heart)</ss>, friends and family"
+	size_t ss_pos = xml.find("<ss type=\"");
+	while (ss_pos != xml.npos) {
+		//ss tag is found
+
+
+		//FIXME, NOT SURE IF THESE WORK
+		regex ss_opening_tag("(<ss type=)\\S+(\"\">)");
+		regex ss_closing_tag("</ss>");
+		regex ss_format("(<ss type=)\\S+(</ss>)");
+	}
 
 	//a href
 	size_t href_pos = xml.find("<a href=\"\"");
@@ -157,7 +170,7 @@ string XMLToStringConverter(const string& xml) {
 		//FIXME, TEST IF WORKING CORRECTLY
 		regex href_opening_tag("(<a href=)\\S+(\"\">)"); //matches opening href tag, from "<a href=" to '"">'
 		regex href_closing_tag("</a>"); //matches closing href tag, "</a>"
-		regex href_format("(<a href=)\\S+(/a>)"); //matches all text between (inclusive) "<a href=" and "/a>"
+		regex href_format("(<a href=)\\S+(</a>)"); //matches all text between (inclusive) "<a href=" and "/a>"
 		//(<a href)\S+(/a>) is the code on regex101, but I think two \ are needed for the S because
 
 
