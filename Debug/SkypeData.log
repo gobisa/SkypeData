@@ -1,10 +1,4 @@
 ﻿  main.cpp
-c:\users\andrius\documents\andrius\selfprojects\skypedata\skypedata\main.cpp(63): error C2672: 'rapidxml::xml_document<char>::parse': no matching overloaded function found
-c:\users\andrius\documents\andrius\selfprojects\skypedata\skypedata\main.cpp(63): error C2783: 'void rapidxml::xml_document<char>::parse(Ch *)': could not deduce template argument for 'Flags'
-          with
-          [
-              Ch=char
-          ]
-  c:\users\andrius\documents\andrius\selfprojects\skypedata\skypedata\rapidxml-1.13\rapidxml.hpp(1381): note: see declaration of 'rapidxml::xml_document<char>::parse'
-  SkypeData.cpp
-  Generating Code...
+c:\users\andrius\documents\andrius\selfprojects\skypedata\skypedata\main.cpp(61): warning C4101: 'root_node': unreferenced local variable
+  SkypeData.vcxproj -> C:\Users\Andrius\Documents\Andrius\SelfProjects\SkypeData\Debug\SkypeData.exe
+  SkypeData.vcxproj -> C:\Users\Andrius\Documents\Andrius\SelfProjects\SkypeData\Debug\SkypeData.pdb (Partial PDB)

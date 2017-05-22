@@ -47,6 +47,7 @@ using rapidxml::xml_document;
 using rapidxml::xml_node;
 using std::ifstream;
 using std::regex;
+using std::regex_replace;
 
 //http://www.sqlapi.com/ use this to get sql into this program so that only the .db file has to be used
 //https://www.tutorialspoint.com/sqlite/sqlite_c_cpp.htm THIS ONE LOOKS BETTER
@@ -155,6 +156,8 @@ string XMLToStringConverter(const string& xml) {
 
 	string plain_text_string = xml; //use this string to replace things
 
+	/*
+
 	//ss (when analyzing the return of this function, if word is in emoji list, add it to both vocabulary and list of emojis)
 	//Example: "Send a message to your Valentine <ss type=""heart"">(heart)</ss>, friends and family"
 	size_t ss_pos = xml.find("<ss type=\"");
@@ -166,6 +169,12 @@ string XMLToStringConverter(const string& xml) {
 		regex ss_opening_tag("(<ss type=)\\S+(\"\">)");
 		regex ss_closing_tag("</ss>");
 		regex ss_format("(<ss type=)\\S+(</ss>)");
+
+		//FIXME, MAY NOT NEED THE WHILE LOOP, OR ANY xml.find
+		//remove opening and closing tags
+		plain_text_string = regex_replace(plain_text_string, ss_opening_tag, "");
+		plain_text_string = regex_replace(plain_text_string, ss_closing_tag, "");
+
 	}
 
 	//a href
@@ -185,7 +194,39 @@ string XMLToStringConverter(const string& xml) {
 		//size_t href_start = xml.find(
 
 		//count instances of href, could be sending multiple links in one message
+
+
+		//FIXME, MAY NOT NEED THE WHILE LOOP, OR ANY xml.find
+		//remove opening and closing tags
+		plain_text_string = regex_replace(plain_text_string, href_opening_tag, "");
+		plain_text_string = regex_replace(plain_text_string, href_closing_tag, "");
 	}
+
+	*/
+
+	//FIXME, NOT SURE IF THESE WORK
+	regex ss_opening_tag("(<ss type=)\\S+(\"\">)");
+	regex ss_closing_tag("</ss>");
+	regex ss_format("(<ss type=)\\S+(</ss>)");
+
+	//FIXME, MAY NOT NEED THE WHILE LOOP, OR ANY xml.find
+	//remove opening and closing tags
+	plain_text_string = regex_replace(plain_text_string, ss_opening_tag, "");
+	plain_text_string = regex_replace(plain_text_string, ss_closing_tag, "");
+
+	//FIXME, TEST IF WORKING CORRECTLY
+	regex href_opening_tag("(<a href=)\\S+(\"\">)"); //matches opening href tag, from "<a href=" to '"">'
+	regex href_closing_tag("</a>"); //matches closing href tag, "</a>"
+	regex href_format("(<a href=)\\S+(</a>)"); //matches all text between (inclusive) "<a href=" and "/a>"
+	//(<a href)\S+(/a>) is the code on regex101, but I think two \ are needed for the S because
+
+
+	//http://www.cplusplus.com/reference/regex/
+
+	//FIXME, MAY NOT NEED THE WHILE LOOP, OR ANY xml.find
+	//remove opening and closing tags
+	plain_text_string = regex_replace(plain_text_string, href_opening_tag, "");
+	plain_text_string = regex_replace(plain_text_string, href_closing_tag, "");
 
 
 	//string is in quotes, but has no tags
