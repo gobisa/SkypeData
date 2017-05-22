@@ -112,6 +112,7 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="SkypeData.cpp" />
+    <ClCompile Include="test.cpp" />
     <ClCompile Include="tinyxml2.cpp" />
   </ItemGroup>
   <ItemGroup>

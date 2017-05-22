@@ -142,6 +142,7 @@ SPECIAL CHARACTERS CAN BE DEALT WITH ONCE THE VOCAB TREES ARE ESTABLISHED
 All tags found using python script:
 ['</i>', '<i r', '<b>W', '</s>', '<s r', '<br/', '<Des', '</De', '<b r', '</Ti', '<Tit', '</b>', '<Fil', '<quo', '</qu', 
 '<met', '<Ori', '</UR', '<URI', '</le', '<leg', '<ss ', '</ss', '<dur', '</du', '</na', '<nam', '</pa', '<par', '</a>', '<a h']
+Tags account for: </i>, <i r>, 
 */
 string XMLToStringConverter(const string& xml) {
 	//no xml tags
@@ -229,6 +230,19 @@ string XMLToStringConverter(const string& xml) {
 	plain_text_string = regex_replace(plain_text_string, href_closing_tag, "");
 
 
+	//should always take form: <b raw_pre=""*"" raw_post=""*"">
+	regex b_opening_tag("(<b raw_pre=)\\S+(post=\"\"*\"\">)");
+	regex b_closing_tag("</i>");
+	plain_text_string = regex_replace(plain_text_string, b_opening_tag, "");
+	plain_text_string = regex_replace(plain_text_string, b_closing_tag, "");
+	
+	//should always take form: <i raw_pre=""_"" raw_post=""_"">
+	regex i_opening_tag("(<i raw_pre=");
+	regex i_closing_tag("</i>");
+	plain_text_string = regex_replace(plain_text_string, i_opening_tag, "");
+	plain_text_string = regex_replace(plain_text_string, i_closing_tag, "");
+
+
 	//string is in quotes, but has no tags
 	return xml;
 }
@@ -276,10 +290,16 @@ string XMLSpecialCharToString(const string& xml_word) {
 }
 
 
+//FIXME
 /*
 -Removes quotes that the user adds
 -if there is a /, treat the string as two words
 */
 string personalTextFormatter(const string& unformatted_string) {
 	return "";
+}
+
+
+void test_functions() {
+
 }
