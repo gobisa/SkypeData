@@ -221,27 +221,74 @@ string XMLToStringConverter(const string& xml) {
 	regex href_format("(<a href=)\\S+(</a>)"); //matches all text between (inclusive) "<a href=" and "/a>"
 	//(<a href)\S+(/a>) is the code on regex101, but I think two \ are needed for the S because
 
-
-	//http://www.cplusplus.com/reference/regex/
-
-	//FIXME, MAY NOT NEED THE WHILE LOOP, OR ANY xml.find
+	//FIXME, for now, we'll just ignore links when converting to text
+	plain_text_string = regex_replace(plain_text_string, href_format, "");
 	//remove opening and closing tags
-	plain_text_string = regex_replace(plain_text_string, href_opening_tag, "");
-	plain_text_string = regex_replace(plain_text_string, href_closing_tag, "");
+	//plain_text_string = regex_replace(plain_text_string, href_opening_tag, "");
+	//plain_text_string = regex_replace(plain_text_string, href_closing_tag, "");
 
 
-	//should always take form: <b raw_pre=""*"" raw_post=""*"">
-	regex b_opening_tag("(<b raw_pre=)\\S+(post=\"\"*\"\">)");
-	regex b_closing_tag("</i>");
-	plain_text_string = regex_replace(plain_text_string, b_opening_tag, "");
-	plain_text_string = regex_replace(plain_text_string, b_closing_tag, "");
+	//when user adds the bold, takes form: <b raw_pre=""*"" raw_post=""*""></b>
+	//when the skype bot adds bold, takes form: <b></b>
+	regex b_user_opening_tag("(<b raw_pre=).*(post=\"\"*\"\">)");
+	regex b_bot_opening_tag("<b>");
+	regex b_user_closing_tag("</b>");
+	plain_text_string = regex_replace(plain_text_string, b_user_opening_tag, "");
+	plain_text_string = regex_replace(plain_text_string, b_bot_opening_tag, "");
+	plain_text_string = regex_replace(plain_text_string, b_user_closing_tag, "");
 	
 	//should always take form: <i raw_pre=""_"" raw_post=""_"">
-	regex i_opening_tag("(<i raw_pre=");
+	//not encountered, but skype bot may use <i></i>
+	regex i_opening_tag("(<i raw_pre=).*(\"\">)");
+	regex i_bot_opening_tag("<i>");
 	regex i_closing_tag("</i>");
 	plain_text_string = regex_replace(plain_text_string, i_opening_tag, "");
+	plain_text_string = regex_replace(plain_text_string, i_bot_opening_tag, "");
 	plain_text_string = regex_replace(plain_text_string, i_closing_tag, "");
 
+	/*
+	All tags found using python script :
+	['</i>', '<i r', '<b>W', '</s>', '<s r', '<br/', '<Des', '</De', '<b r', '</Ti', '<Tit', 
+	'</b>', '<Fil', '<quo', '</qu',
+		'<met', '<Ori', '</UR', '<URI', '</le', '<leg', '<ss ', '</ss', '<dur', '</du',
+		'</na', '<nam', '</pa', '<par', '</a>', '<a h']
+	Tags account for :	</i>, <i r, <b>, </s>, <s r>, <br/, <Des, </De, <b r, </Ti, <Tit, </b>
+						<Fil, <quo, </qu, 
+	Tags ignored:	<Des and </De are description tags nested within the <URIObject tags
+					</Ti and <Tit are title tags nested within the <URIObject tags
+					<Fil is a single tag for filesize nested within the URIObject tags
+	*/
+
+	regex s_opening_tag("(<s raw_pre=)\\S+(\"\">)");
+	regex s_bot_opening_tag("<s>");
+	regex s_closing_tag("</s>");
+	plain_text_string = regex_replace(plain_text_string, s_opening_tag, "");
+	plain_text_string = regex_replace(plain_text_string, s_bot_opening_tag, "");
+	plain_text_string = regex_replace(plain_text_string, s_closing_tag, "");
+	
+	//br doesn't have opening and closing tags, it only acts as a line break
+	regex br_tag("<br/>");
+	plain_text_string = regex_replace(plain_text_string, br_tag, "");
+
+
+	//quo is a quote tag, when you copy and paste someone else
+	/*"<quote author=""ajmatvekas"" authorname=""Audrius Matvekas"" 
+	conversation=""19:6231efe89fc74b3884799e8c68c75912@thread.skype"" 
+	guid=""x25fbbca08aefaa0253f83b3c7289fac113955099789439e0294209cd68ac8f1e"" 
+	timestamp=""1486522229""><legacyquote>[9:50:29 PM] 
+	Audrius Matvekas: </legacyquote>Audrius Matvekas has been promoted to conversation host.<legacyquote>
+	*/
+	//NOTE: DOES NOT FULLY DEAL WITH THE TEXT WITHIN THE QUOTE TAGS
+	regex quote_opening_tag("<quote.*>"); //matches anything from <quote to >
+	plain_text_string = regex_replace(plain_text_string, quote_opening_tag, "");
+	//deal with /qu
+	regex quote_closing_tag("</quote>");
+	plain_text_string = regex_replace(plain_text_string, quote_closing_tag, "");
+
+	//deal with legacyquote
+	/*
+	<legacyquote>[1:06:02 AM] Erikas Anužis: </legacyquote>glob, duki and I are planning a 	trip to arizona<legacyquote>&lt;&lt;&lt; </legacyquote></quote>we are?"
+	*/
 
 	//string is in quotes, but has no tags
 	return xml;
