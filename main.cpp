@@ -279,6 +279,7 @@ string XMLToStringConverter(const string& xml) {
 	Audrius Matvekas: </legacyquote>Audrius Matvekas has been promoted to conversation host.<legacyquote>
 	*/
 	//NOTE: DOES NOT FULLY DEAL WITH THE TEXT WITHIN THE QUOTE TAGS
+	//FIXME, NOT SURE IF THIS IS RIGHT
 	regex quote_opening_tag("<quote.*>"); //matches anything from <quote to >
 	plain_text_string = regex_replace(plain_text_string, quote_opening_tag, "");
 	//deal with /qu
