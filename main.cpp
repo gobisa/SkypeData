@@ -250,13 +250,17 @@ string XMLToStringConverter(const string& xml) {
 		'<met', '<Ori', '</UR', '<URI', '</le', '<leg', '<ss ', '</ss', '<dur', '</du',
 		'</na', '<nam', '</pa', '<par', '</a>', '<a h']
 	Tags account for :	</i>, <i r, <b>, </s>, <s r>, <br/, <Des, </De, <b r, </Ti, <Tit, </b>
-						<Fil, <quo, </qu, </le, <leg, <met, <Ori
+						<Fil, <quo, </qu, </le, <leg, <met, <Ori, '</UR', '<URI', '</le', '<leg',
+						'<ss ', '</ss', '<dur', '</du','</na', '<nam', '</pa', '<par', '</a>', '<a h'
 	Tags ignored:	<Des and </De are description tags nested within the <URIObject tags
 					</Ti and <Tit are title tags nested within the <URIObject tags
 					<Fil is a single tag for filesize nested within the URIObject tags
 					<met is a meta tag for object type within the URIObject tags
 					<Ori is the OriginalName tag for object name within the URIObject tags
 					</UR and <URI are the URIObject tags
+					<dur and </du are the duration tags within the partlist tags
+					</na and <nam are the name tags within the partlist tags
+					</pa and <par are the start of tags for both <part> and <partlist>, and <part> tags are within partlist tags
 	*/
 
 	regex s_opening_tag("(<s raw_pre=)\\S+(\"\">)");
