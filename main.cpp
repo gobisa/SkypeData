@@ -208,10 +208,7 @@ string XMLToStringConverter(const string& xml) {
 	//FIXME, NOT SURE IF THESE WORK
 	regex ss_opening_tag("(<ss type=)\\S+(\"\">)");
 	regex ss_closing_tag("</ss>");
-	regex ss_format("(<ss type=)\\S+(</ss>)");
-
-	//FIXME, MAY NOT NEED THE WHILE LOOP, OR ANY xml.find
-	//remove opening and closing tags
+	regex ss_format("(<ss type=)\\S+(</ss>)"); //unused
 	plain_text_string = regex_replace(plain_text_string, ss_opening_tag, "");
 	plain_text_string = regex_replace(plain_text_string, ss_closing_tag, "");
 
@@ -253,10 +250,13 @@ string XMLToStringConverter(const string& xml) {
 		'<met', '<Ori', '</UR', '<URI', '</le', '<leg', '<ss ', '</ss', '<dur', '</du',
 		'</na', '<nam', '</pa', '<par', '</a>', '<a h']
 	Tags account for :	</i>, <i r, <b>, </s>, <s r>, <br/, <Des, </De, <b r, </Ti, <Tit, </b>
-						<Fil, <quo, </qu, 
+						<Fil, <quo, </qu, </le, <leg, <met, <Ori
 	Tags ignored:	<Des and </De are description tags nested within the <URIObject tags
 					</Ti and <Tit are title tags nested within the <URIObject tags
 					<Fil is a single tag for filesize nested within the URIObject tags
+					<met is a meta tag for object type within the URIObject tags
+					<Ori is the OriginalName tag for object name within the URIObject tags
+					</UR and <URI are the URIObject tags
 	*/
 
 	regex s_opening_tag("(<s raw_pre=)\\S+(\"\">)");
@@ -278,9 +278,22 @@ string XMLToStringConverter(const string& xml) {
 	timestamp=""1486522229""><legacyquote>[9:50:29 PM] 
 	Audrius Matvekas: </legacyquote>Audrius Matvekas has been promoted to conversation host.<legacyquote>
 	*/
+	/*
+	ajmatvekas,,"<quote author=""andrius.gobis"" authorname=""Andrius Gobis"" conversation=""19:6231efe89fc74b3884799e8c68c75912@thread.skype"" guid=""x50b30ee4
+	e6b8d6e7038c989abecb44260fcf24b5ca7d84e8f9d80255d0ca1081"" timestamp=""1486322839""><legacyquote>[2:27:19 PM] Andrius Gobis: </legacyquote>it takes painfully 
+	long and you hate each other more than catan when you wait for people to finish their turn<legacyquote>
+	&lt;&lt;&lt; </legacyquote></quote>matai this is literally the reason you said you wouldn&apos;t play multiplayer with me"
+	*/
+
 	//NOTE: DOES NOT FULLY DEAL WITH THE TEXT WITHIN THE QUOTE TAGS
 	//FIXME, NOT SURE IF THIS IS RIGHT
+	//FIXME, I AM COUNTING QUOTES TOWARD THE QUOTER'S VOCABULARY
 	regex quote_opening_tag("<quote.*>"); //matches anything from <quote to >
+	/*
+	matches:
+	<quote author=""andrius.gobis"" authorname=""Andrius Gobis"" conversation=""19:6231efe89fc74b3884799e8c68c75912@thread.skype"" guid=""x50b30ee4
+	e6b8d6e7038c989abecb44260fcf24b5ca7d84e8f9d80255d0ca1081"" timestamp=""1486322839"">
+	*/
 	plain_text_string = regex_replace(plain_text_string, quote_opening_tag, "");
 	//deal with /qu
 	regex quote_closing_tag("</quote>");
@@ -290,6 +303,8 @@ string XMLToStringConverter(const string& xml) {
 	/*
 	<legacyquote>[1:06:02 AM] Erikas Anužis: </legacyquote>glob, duki and I are planning a 	trip to arizona<legacyquote>&lt;&lt;&lt; </legacyquote></quote>we are?"
 	*/
+	regex legacyquote_tags("(<legacyquote>).*(</legacyquote>)");
+	plain_text_string = regex_replace(plain_text_string, legacyquote_tags, "");
 
 	//string is in quotes, but has no tags
 	return xml;
