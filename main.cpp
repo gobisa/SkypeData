@@ -48,6 +48,7 @@ using rapidxml::xml_node;
 using std::ifstream;
 using std::regex;
 using std::regex_replace;
+using std::stringstream;
 
 //http://www.sqlapi.com/ use this to get sql into this program so that only the .db file has to be used
 //https://www.tutorialspoint.com/sqlite/sqlite_c_cpp.htm THIS ONE LOOKS BETTER
@@ -310,8 +311,19 @@ string XMLToStringConverter(const string& xml) {
 	regex legacyquote_tags("(<legacyquote>).*(</legacyquote>)");
 	plain_text_string = regex_replace(plain_text_string, legacyquote_tags, "");
 
+
+	//FIXME, NOT SURE IF THIS SHOULD BE DONE HERE
 	//string is in quotes, but has no tags
-	return xml;
+	/*
+	stringstream ss_plain_text_string(plain_text_string);
+	string word;
+	
+	while (ss_plain_text_string >> word) {
+
+	}
+	*/
+
+	return plain_text_string;
 }
 
 
@@ -319,7 +331,7 @@ string XMLToStringConverter(const string& xml) {
 //FIXME, WRITE TEST CASES
 /*
 REQUIRES:	xml_word is a single word, with no spaces
-MODIFIES:	null
+MODIFIES:	nothing
 EFFECTS:	returns a string based on xml_word, 
 			with all xml special characters replaced by their plain text characters
 */
@@ -357,16 +369,23 @@ string XMLSpecialCharToString(const string& xml_word) {
 }
 
 
-//FIXME
 /*
 -Removes quotes that the user adds
 -if there is a /, treat the string as two words
 */
 string personalTextFormatter(const string& unformatted_string) {
-	return "";
+	regex quote("\"");
+	string removed_quotes_string = unformatted_string;
+	return regex_replace(removed_quotes_string, quote, "");
 }
 
 
 void test_functions() {
 
+}
+
+
+string storeDataFromXMLString(const string& xml_message) {
+
+	stringstream ss_xml_message(xml_message);
 }
