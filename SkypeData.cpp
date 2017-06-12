@@ -7,6 +7,7 @@
 #include <string>
 #include <set>
 #include <regex>
+#include <sstream>
 
 
 
@@ -123,7 +124,7 @@ void SkypeUser::addRow(csvstream::row_type row) {
 	rows.push_back(row);
 }
 
-void SkypeUser::analyzeData() {
+void SkypeUser::sortData() {
 	/*
 	vector<string> raw_xml_messages;
 	vector<string> parsed_messages;
@@ -154,7 +155,17 @@ void SkypeUser::analyzeData() {
 	
 }
 
+void SkypeUser::analyzeData() {
 
+	string word;
+
+	for (auto msg : parsed_messages) {
+		stringstream message(msg);
+		while (message >> word) {
+
+		}
+	}
+}
 
 
 
@@ -420,4 +431,14 @@ string SkypeUser::personalTextFormatter(const string& unformatted_string) {
 	regex quote("\"");
 	string removed_quotes_string = unformatted_string;
 	return regex_replace(removed_quotes_string, quote, "");
+}
+
+
+//removes any prefix or postfix punctuation
+//FIXME, check for correctness
+string SkypeUser::removePunctuation(const string& word) {
+	regex punct("^[[:punct:]]+|[[:punct:]]+$");
+	string removed = word;
+	regex_replace(removed, punct, "");
+	return removed;
 }

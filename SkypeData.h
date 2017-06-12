@@ -15,6 +15,7 @@ using std::map;
 using std::string;
 using std::set;
 using std::regex;
+using std::stringstream;
 
 class SkypeData {
 public:
@@ -43,10 +44,11 @@ public:
 	SkypeUser(const string& name_in);
 	void addRow(csvstream::row_type row);
 	void sortData(); //fills in raw_xml_messages, parsed_messages, num_posts, num_edits
-	void analyzeData();
+	void analyzeData();  //does vocab count
 	string XMLToStringConverter(const string& xml);
 	string XMLSpecialCharToString(const string& xml_word);
 	string personalTextFormatter(const string& unformatted_string);
+	string removePunctuation(const string& text);
 
 private:
 
