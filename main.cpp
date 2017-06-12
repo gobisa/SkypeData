@@ -53,23 +53,61 @@ using std::stringstream;
 //http://www.sqlapi.com/ use this to get sql into this program so that only the .db file has to be used
 //https://www.tutorialspoint.com/sqlite/sqlite_c_cpp.htm THIS ONE LOOKS BETTER
 
+/*
+string XMLToStringConverter(const string& xml);
+string XMLSpecialCharToString(const string& xml_word);
+string personalTextFormatter(const string& unformatted_string);
+void testFunctions();
+string storeDataFromXMLString(const string& xml_message);
+*/
+
 int main(int argc, char** argv) {
 
 	//read in second argument as file name
 	//string file_name = argv[1];
 
-	
+	/*
 	xml_document<> doc;
 	xml_node<> * root_node;
 	ifstream my_skype_data("skype_data.csv");
-	
+	*/
 	
 	//use this one to 
-	csvstream skype_data_with_xml("skype_data.csv");
-	csvstream skype_data_parsed("skype_data_parsed.csv");
+	try {
+		//column names are: author,edited_by,body_xml
+		csvstream skype_data("skype_data.csv");
+		csvstream::row_type row;
 
-	string xml_text;
-	string parsed_text;
+		set<string> authors;
+		vector<SkypeUser*> skype_users;
+
+
+		//create all users and fill vector rows
+		int user_index = -1;
+		while (skype_data >> row) {
+		
+			if (authors.insert(row["author"]).second) {//new author
+				skype_users.push_back(new SkypeUser(row["author"]));
+				++user_index;
+			}
+
+			skype_users[user_index]->addRow(row);
+		}
+
+
+		//analyze data
+
+
+
+		//delete dynamic memory
+		for (SkypeUser* user : skype_users) {
+			delete user;
+		}
+	}
+	catch (csvstream_exception e) {
+		cout << "Unable to open file... quitting\n";
+		exit(EXIT_FAILURE);
+	}
 
 	//ifstream file_with_xml("")
 
@@ -306,7 +344,8 @@ string XMLToStringConverter(const string& xml) {
 
 	//deal with legacyquote
 	/*
-	<legacyquote>[1:06:02 AM] Erikas Anužis: </legacyquote>glob, duki and I are planning a 	trip to arizona<legacyquote>&lt;&lt;&lt; </legacyquote></quote>we are?"
+	<legacyquote>[1:06:02 AM] Erikas Anužis: </legacyquote>glob, duki and I are planning a 
+	trip to arizona<legacyquote>&lt;&lt;&lt; </legacyquote></quote>we are?"
 	*/
 	regex legacyquote_tags("(<legacyquote>).*(</legacyquote>)");
 	plain_text_string = regex_replace(plain_text_string, legacyquote_tags, "");
@@ -380,12 +419,14 @@ string personalTextFormatter(const string& unformatted_string) {
 }
 
 
-void test_functions() {
+void testFunctions() {
 
 }
 
 
+//FIXME
 string storeDataFromXMLString(const string& xml_message) {
 
 	stringstream ss_xml_message(xml_message);
+	return "";
 }

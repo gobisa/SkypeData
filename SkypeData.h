@@ -1,3 +1,6 @@
+#ifndef SKYPEDATA_H
+#define SKYPEDATA_H
+
 #include "csvstream.h"
 #include <string>
 #include <map>
@@ -11,12 +14,13 @@ using std::vector;
 using std::map;
 using std::string;
 using std::set;
+using std::regex;
 
 class SkypeData {
 public:
 	SkypeData(csvstream& csv_data);
 private:
-	friend class UserSkypeData;
+	friend class SkypeUser;
 
 	//void update_users_num_posts();
 	//void update_users_num_edits();
@@ -27,33 +31,43 @@ private:
 	~SkypeData();
 
 	int posts_count;
-	vector<UserSkypeData*> user_data; //stores data for each user
+	vector<SkypeUser*> user_data; //stores data for each user
 	vector<csvstream::row_type> rows; //stores each row of the csv in a vector
 	set<string> user_names;
 };
 
 //each of these objects stores data by person
 //each person has their own object of this class
-class UserSkypeData {
+class SkypeUser {
 public:
-	UserSkypeData(const string& name_in);
+	SkypeUser(const string& name_in);
+	void addRow(csvstream::row_type row);
+	void sortData(); //fills in raw_xml_messages, parsed_messages, num_posts, num_edits
+	void analyzeData();
+	string XMLToStringConverter(const string& xml);
+	string XMLSpecialCharToString(const string& xml_word);
+	string personalTextFormatter(const string& unformatted_string);
 
 private:
-	friend class SkypeData;
 
-	//FIXME: DELETE
-	//variables with "//" are done
 	string name; //
-	vector<csvstream::row_type> rows;
-	int num_posts; // = rows.size();
-	int num_edits;
+	vector<csvstream::row_type> rows; //
+	vector<string> raw_xml_messages; //
+	vector<string> parsed_messages;  //
+	int num_posts; //
+	int num_edits; //
 
-	map<string, int> vocabulary_count; //unique word frequencies
-	map<string, int> emoji_count; //unique emoji frequencies
-	int word_count; //total words, non unique
+	map<string, int> vocabulary_count; //unique word frequencies //use plain text
+	map<string, int> emoji_count; //unique emoji frequencies //should use xml
+	int word_count; //total words, non unique //use multiplication in vocabulary_count
 	int vocab_size; //number of unique words, = vocabulary_count.size()
 	int bad_words_count;
 	int punctuation_count;
 	int link_count;
 	int skype_emoji_count;
 };
+
+
+
+
+#endif
