@@ -160,9 +160,18 @@ void SkypeUser::analyzeData() {
 	string word;
 
 	for (auto msg : parsed_messages) {
+
+
+		//vocabulary count
 		stringstream message(msg);
 		while (message >> word) {
-
+			//parse xmlspecialchartostring, then remove punctuation 
+			//must be in this order so that xml isn't removed as punct			
+			word = removePunctuation(XMLSpecialCharToString(word));
+			if (vocabulary_count.find(word) == vocabulary_count.end()) { //word not found
+				vocabulary_count[word] = 0;
+			}
+			++vocabulary_count[word];
 		}
 	}
 }
@@ -421,7 +430,7 @@ string SkypeUser::XMLSpecialCharToString(const string& xml_word) {
 
 	return parsed_word;
 }
-
+//remove this in vocab count
 
 /*
 -Removes quotes that the user adds
