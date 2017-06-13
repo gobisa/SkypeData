@@ -91,6 +91,7 @@ int main(int argc, char** argv) {
 				++user_index;
 			}
 
+			//FIXME, I THINK THERE'S AN ERROR HERE, ERROR WHILE DEBUGGING
 			skype_users[user_index]->addRow(row);
 		}
 
