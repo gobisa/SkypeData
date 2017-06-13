@@ -161,8 +161,7 @@ void SkypeUser::analyzeData() {
 
 	for (auto msg : parsed_messages) {
 
-
-		//vocabulary count
+		//vocabulary_count, word_count
 		stringstream message(msg);
 		while (message >> word) {
 			//parse xmlspecialchartostring, then remove punctuation 
@@ -172,7 +171,25 @@ void SkypeUser::analyzeData() {
 				vocabulary_count[word] = 0;
 			}
 			++vocabulary_count[word];
+			++word_count;
 		}
+	}
+
+	//vocab_size
+	vocab_size = vocabulary_count.size();
+
+
+
+	for (auto msg : raw_xml_messages) {
+
+		//emoji_count
+		//want to extract emoji between the tags
+		//find emojis //<ss type=""cat"">:3</ss>, <ss type=""like"">(like)</ss>
+		regex emoji_format("<ss type=\"\"[[:alpha:]]+\"\">"); //closing: "</ss>"
+		//FIXME
+		//https://stackoverflow.com/questions/12908534/retrieving-a-regex-search-in-c
+
+
 	}
 }
 
