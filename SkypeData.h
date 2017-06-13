@@ -61,12 +61,14 @@ private:
 
 	map<string, int> vocabulary_count; //unique word frequencies //use plain text
 	map<string, int> emoji_count; //unique emoji frequencies //should use xml
-	int word_count; //total words, non unique //use multiplication in vocabulary_count
+	int word_count; //total words, non unique 
 	int vocab_size; //number of unique words, = vocabulary_count.size()
 	int bad_words_count;
 	int punctuation_count;
 	int link_count;
 	int skype_emoji_count;
+	int negative_words_count;
+	int positive_words_count;
 };
 
 
