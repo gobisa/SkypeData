@@ -84,6 +84,7 @@ int main(int argc, char** argv) {
 
 		//create all users and fill vector rows
 		int user_index = -1;
+		int bug_counter = 0; //FIXME, ONLY FOR TESTING
 		while (skype_data >> row) {
 		
 			if (authors.insert(row["author"]).second) {//new author
@@ -93,7 +94,11 @@ int main(int argc, char** argv) {
 
 			//FIXME, I THINK THERE'S AN ERROR HERE, ERROR WHILE DEBUGGING
 			skype_users[user_index]->addRow(row);
+
+			bug_counter++; //FIXME, ONLY FOR TESTING
+			cout << bug_counter << std::endl;
 		}
+		
 
 
 		//analyze data
