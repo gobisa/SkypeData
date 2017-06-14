@@ -75,7 +75,7 @@ int main(int argc, char** argv) {
 	//use this one to 
 	try {
 		//column names are: author,edited_by,body_xml
-		csvstream skype_data("skype_data.csv");
+		csvstream skype_data("skype_data.csv"); //FIXME, MAKE SURE QUERY IS SORTED BY AUTHOR
 		csvstream::row_type row;
 
 		set<string> authors;
