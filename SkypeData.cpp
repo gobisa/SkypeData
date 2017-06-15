@@ -142,8 +142,10 @@ void SkypeUser::sortData() {
 	*/
 
 	for (auto row : rows) {
-		raw_xml_messages.push_back(row["body_xml"]);
-		string parsed_text = XMLToStringConverter(row["body_xml"]);
+		//std::cout << "raw xml: " << row["replace(body_xml, CHAR(10), '')"] << std::endl;
+		raw_xml_messages.push_back(row["replace(body_xml, CHAR(10), '')"]);
+		string parsed_text = XMLToStringConverter(row["replace(body_xml, CHAR(10), '')"]);
+		//std::cout << "parsed_text: " << parsed_text << std::endl;
 		parsed_messages.push_back(parsed_text);
 		
 		if (row["edited_by"] == name) {
@@ -160,10 +162,11 @@ void SkypeUser::analyzeData() {
 	string word;
 
 	for (auto msg : parsed_messages) {
-
+		std::cout << msg << std::endl;
 		//vocabulary_count, word_count
 		stringstream message(msg);
 		while (message >> word) {
+			//std::cout << word << std::endl;
 			//parse xmlspecialchartostring, then remove punctuation 
 			//must be in this order so that xml isn't removed as punct			
 			word = removePunctuation(XMLSpecialCharToString(word));
@@ -178,6 +181,8 @@ void SkypeUser::analyzeData() {
 	//vocab_size
 	vocab_size = vocabulary_count.size();
 
+	//FIXME, FOR DEBUGGING
+	std::cout << vocab_size << std::endl;
 
 
 	for (auto msg : raw_xml_messages) {
@@ -225,6 +230,9 @@ All tags found using python script:
 Tags account for: </i>, <i r>,
 */
 string SkypeUser::XMLToStringConverter(const string& xml) {
+
+	std::cout << "xml: " << xml << std::endl;
+
 	//no xml tags
 	if (xml[0] != '"') return xml;
 
@@ -236,7 +244,8 @@ string SkypeUser::XMLToStringConverter(const string& xml) {
 
 
 	string plain_text_string = xml; //use this string to replace things
-
+	//FIXME, FUNCTION IS ALWAYS RETURNING BEFORE THIS POINT
+	std::cout << "plain_text_string declared" << std::endl;
 	/*
 
 	//ss (when analyzing the return of this function, if word is in emoji list, add it to both vocabulary and list of emojis)
