@@ -75,8 +75,14 @@ int main(int argc, char** argv) {
 	//use this one to 
 	try {
 		//column names are: author,edited_by,body_xml
-		csvstream skype_data("skype_data.csv"); //FIXME, MAKE SURE QUERY IS SORTED BY AUTHOR
+		//"replace(body_xml, CHAR(10), '')"
+		//author,edited_by,"replace(body_xml, CHAR(10), '')"
+		csvstream skype_data("main_csv.csv"); //FIXME, MAKE SURE QUERY IS SORTED BY AUTHOR
 		csvstream::row_type row;
+
+		//for (auto header : skype_data.getheader()) {
+		//	cout << header << std::endl;
+		//}
 
 		set<string> authors;
 		vector<SkypeUser*> skype_users;
@@ -90,20 +96,24 @@ int main(int argc, char** argv) {
 			if (authors.insert(row["author"]).second) {//new author
 				skype_users.push_back(new SkypeUser(row["author"]));
 				++user_index;
+				//cout << row["author"] << " added." << std::endl;
 			}
 
 			//FIXME, I THINK THERE'S AN ERROR HERE, ERROR WHILE DEBUGGING
 			skype_users[user_index]->addRow(row);
 
 			bug_counter++; //FIXME, ONLY FOR TESTING
-			cout << bug_counter << std::endl;
+			//cout << bug_counter << std::endl;
+
 		}
 		
 
 
 		//analyze data
-
-
+		for (SkypeUser* user : skype_users) {
+			user->sortData();
+			user->analyzeData();
+		}
 
 		//delete dynamic memory
 		for (SkypeUser* user : skype_users) {
@@ -111,7 +121,7 @@ int main(int argc, char** argv) {
 		}
 	}
 	catch (csvstream_exception e) {
-		cout << "Unable to open file... quitting\n";
+		cout << "Error with file... quitting\n";
 		exit(EXIT_FAILURE);
 	}
 
