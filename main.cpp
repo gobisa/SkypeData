@@ -96,15 +96,11 @@ int main(int argc, char** argv) {
 			if (authors.insert(row["author"]).second) {//new author
 				skype_users.push_back(new SkypeUser(row["author"]));
 				++user_index;
-				//cout << row["author"] << " added." << std::endl;
 			}
 
-			//FIXME, I THINK THERE'S AN ERROR HERE, ERROR WHILE DEBUGGING
 			skype_users[user_index]->addRow(row);
 
 			bug_counter++; //FIXME, ONLY FOR TESTING
-			//cout << bug_counter << std::endl;
-
 		}
 		
 
