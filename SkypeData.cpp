@@ -231,6 +231,8 @@ Tags account for: </i>, <i r>,
 */
 string SkypeUser::XMLToStringConverter(const string& xml) {
 
+	//FIXME, when message has a comma, it starts with quotes in the csv
+
 	std::cout << "xml: " << xml << std::endl;
 
 	//no xml tags
