@@ -142,10 +142,10 @@ void SkypeUser::sortData() {
 	*/
 
 	for (auto row : rows) {
-		//std::cout << "raw xml: " << row["replace(body_xml, CHAR(10), '')"] << std::endl;
+		std::cout << "raw xml: " << row["replace(body_xml, CHAR(10), '')"] << std::endl;
 		raw_xml_messages.push_back(row["replace(body_xml, CHAR(10), '')"]);
 		string parsed_text = XMLToStringConverter(row["replace(body_xml, CHAR(10), '')"]);
-		//std::cout << "parsed_text: " << parsed_text << std::endl;
+		std::cout << "parsed_text: " << parsed_text << std::endl;
 		parsed_messages.push_back(parsed_text);
 		
 		if (row["edited_by"] == name) {
@@ -239,10 +239,10 @@ string SkypeUser::XMLToStringConverter(const string& xml) {
 	if (xml[0] != '"') return xml;
 
 	//partlist type
-	if (xml.find("\"<partlist type=\"\"") != xml.npos) return "";
+	if (xml.find("<partlist type=\"") != xml.npos) return "";
 
 	//<URIObject type
-	if (xml.find("\"<URIObject type=\"\"") != xml.npos) return "";
+	if (xml.find("<URIObject type=\"") != xml.npos) return "";
 
 
 	string plain_text_string = xml; //use this string to replace things
