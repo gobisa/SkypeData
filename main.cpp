@@ -26,8 +26,8 @@ rapidxml*.hpp: http://rapidxml.sourceforge.net/, http://rapidxml.sourceforge.net
 
 #include "csvstream.h"
 //#include "tinyxml2.h"
-#include "rapidxml-1.13\rapidxml.hpp"
-#include "rapidxml-1.13\rapidxml_print.hpp"
+//#include "rapidxml-1.13\rapidxml.hpp"
+//#include "rapidxml-1.13\rapidxml_print.hpp"
 #include "SkypeData.h"
 #include <string>
 #include <map>
@@ -44,8 +44,8 @@ using std::cout;
 using std::map;
 using std::set;
 using std::vector;
-using rapidxml::xml_document;
-using rapidxml::xml_node;
+//using rapidxml::xml_document;
+//using rapidxml::xml_node;
 using std::ifstream;
 using std::regex;
 using std::regex_replace;
@@ -75,7 +75,7 @@ int main(int argc, char** argv) {
 	ifstream my_skype_data("skype_data.csv");
 	*/
 
-	test_XMLToStringConverter();
+	//test_XMLToStringConverter();
 	
 	//use this one to 
 	try {
@@ -459,4 +459,19 @@ void test_XMLToStringConverter() {
 	string test1 = "<partlist type=""started"" alt=""""><part identity=""andrius.gobis""><name>andrius.gobis</name><duration>3414</duration></part><part identity=""erikas.anuzis""><name>erikas.anuzis</name><duration>3414</duration></part><part identity=""matas.lelis""><name>matas.lelis</name><duration>3414</duration></part></partlist>";
 	string test1correct = "";
 	assert(test1correct == s.XMLToStringConverter(test1));
+
+	string test2 = "<URIObject type=""Picture.1"" uri=""https://api.asm.skype.com/v1/objects/0-cus-d1-868439622f7ea62b724aab8f84dcba72"" url_thumbnail=""https://api.asm.skype.com/v1/objects/0-cus-d1-868439622f7ea62b724aab8f84dcba72/views/imgt1"">You&apos;ve received a new picture. View it at: <a href=""https://login.skype.com/login/sso?go=xmmfallback?pic=0-cus-d1-868439622f7ea62b724aab8f84dcba72"">https://login.skype.com/login/sso?go=xmmfallback?pic=0-cus-d1-868439622f7ea62b724aab8f84dcba72</a><FileSize v=""74616""/><OriginalName v=""""/><meta type=""photo"" originalName=""""/></URIObject>";
+	string test2correct = "";
+	assert(test2correct == s.XMLToStringConverter(test2));
+
+	string test3 = "<a href=""https://scontent-ort2-1.xx.fbcdn.net/v/t1.0-9/3338_1144447407178_4380501_n.jpg?oh=8047854a7e343508a3e2e6418ba34695&amp;oe=5917F777"">https://scontent-ort2-1.xx.fbcdn.net/v/t1.0-9/3338_1144447407178_4380501_n.jpg?oh=8047854a7e343508a3e2e6418ba34695&amp;oe=5917F777</a>";
+	string test3correct = "";
+	assert(test3correct == s.XMLToStringConverter(test3));
+
+	string test4 = "<ss type=""cry"">;(</ss>";
+	string test4correct = ";(";
+	string test4debug = s.XMLToStringConverter(test4);
+	assert(test4correct == s.XMLToStringConverter(test4));
+
+	return;
 }

@@ -7,8 +7,10 @@
 #include <string>
 #include <set>
 #include <regex>
+//#include <regex.h>
 #include <sstream>
 
+using std::regex;
 
 
 ////////////////////////////////////////
@@ -236,43 +238,20 @@ string SkypeUser::XMLToStringConverter(const string& xml) {
 	std::cout << "xml: " << xml << std::endl;
 
 	//no xml tags
-	if (xml[0] != '"') return xml;
+	//FIXME, MAY NEED TO UNREMOVE
+	//if (xml[0] != '"') return xml;
 
 	//partlist type
-	if (xml.find("<partlist type=\"") != xml.npos) return "";
+	if (xml.find("<partlist type=") != xml.npos) return ""; //GOOD
 
 	//<URIObject type
-	if (xml.find("<URIObject type=\"") != xml.npos) return "";
+	if (xml.find("<URIObject type=") != xml.npos) return ""; //GOOD
 
 
 	string plain_text_string = xml; //use this string to replace things
 	//FIXME, FUNCTION IS ALWAYS RETURNING BEFORE THIS POINT
 	std::cout << "plain_text_string declared" << std::endl;
 	/*
-
-	//ss (when analyzing the return of this function, if word is in emoji list, add it to both vocabulary and list of emojis)
-	//Example: "Send a message to your Valentine <ss type=""heart"">(heart)</ss>, friends and family"
-	size_t ss_pos = xml.find("<ss type=\"");
-	while (ss_pos != xml.npos) {
-	//ss tag is found
-
-
-	//FIXME, NOT SURE IF THESE WORK
-	regex ss_opening_tag("(<ss type=)\\S+(\"\">)");
-	regex ss_closing_tag("</ss>");
-	regex ss_format("(<ss type=)\\S+(</ss>)");
-
-	//FIXME, MAY NOT NEED THE WHILE LOOP, OR ANY xml.find
-	//remove opening and closing tags
-	plain_text_string = regex_replace(plain_text_string, ss_opening_tag, "");
-	plain_text_string = regex_replace(plain_text_string, ss_closing_tag, "");
-
-	}
-
-	//a href
-	size_t href_pos = xml.find("<a href=\"\"");
-	while (href_pos != xml.npos) {
-	//a href tag is found
 
 	//FIXME, TEST IF WORKING CORRECTLY
 	regex href_opening_tag("(<a href=)\\S+(\"\">)"); //matches opening href tag, from "<a href=" to '"">'
@@ -282,22 +261,10 @@ string SkypeUser::XMLToStringConverter(const string& xml) {
 
 
 	//http://www.cplusplus.com/reference/regex/
-
-	//size_t href_start = xml.find(
-
-	//count instances of href, could be sending multiple links in one message
-
-
-	//FIXME, MAY NOT NEED THE WHILE LOOP, OR ANY xml.find
-	//remove opening and closing tags
-	plain_text_string = regex_replace(plain_text_string, href_opening_tag, "");
-	plain_text_string = regex_replace(plain_text_string, href_closing_tag, "");
-	}
-
 	*/
 
 	//FIXME, NOT SURE IF THESE WORK
-	regex ss_opening_tag("(<ss type=)\\S+(\"\">)");
+	regex ss_opening_tag("<ss type=\\S+>");
 	regex ss_closing_tag("</ss>");
 	regex ss_format("(<ss type=)\\S+(</ss>)"); //unused
 	plain_text_string = regex_replace(plain_text_string, ss_opening_tag, "");
@@ -307,7 +274,7 @@ string SkypeUser::XMLToStringConverter(const string& xml) {
 	regex href_opening_tag("(<a href=)\\S+(\"\">)"); //matches opening href tag, from "<a href=" to '"">'
 	regex href_closing_tag("</a>"); //matches closing href tag, "</a>"
 	regex href_format("(<a href=)\\S+(</a>)"); //matches all text between (inclusive) "<a href=" and "/a>"
-											   //(<a href)\S+(/a>) is the code on regex101, but I think two \ are needed for the S because
+	//GOOD									   //(<a href)\S+(/a>) is the code on regex101, but I think two \ are needed for the S because
 
 											   //FIXME, for now, we'll just ignore links when converting to text
 	plain_text_string = regex_replace(plain_text_string, href_format, "");
