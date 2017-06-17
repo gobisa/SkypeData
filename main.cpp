@@ -37,6 +37,7 @@ rapidxml*.hpp: http://rapidxml.sourceforge.net/, http://rapidxml.sourceforge.net
 #include <vector>
 #include <fstream>
 #include <regex>
+#include <cassert>
 
 using std::string;
 using std::cout;
@@ -61,6 +62,8 @@ void testFunctions();
 string storeDataFromXMLString(const string& xml_message);
 */
 
+void test_XMLToStringConverter();
+
 int main(int argc, char** argv) {
 
 	//read in second argument as file name
@@ -71,6 +74,8 @@ int main(int argc, char** argv) {
 	xml_node<> * root_node;
 	ifstream my_skype_data("skype_data.csv");
 	*/
+
+	test_XMLToStringConverter();
 	
 	//use this one to 
 	try {
@@ -441,4 +446,17 @@ string storeDataFromXMLString(const string& xml_message) {
 
 	stringstream ss_xml_message(xml_message);
 	return "";
+}
+
+
+
+
+
+void test_XMLToStringConverter() {
+
+	SkypeUser s("test");
+
+	string test1 = "<partlist type=""started"" alt=""""><part identity=""andrius.gobis""><name>andrius.gobis</name><duration>3414</duration></part><part identity=""erikas.anuzis""><name>erikas.anuzis</name><duration>3414</duration></part><part identity=""matas.lelis""><name>matas.lelis</name><duration>3414</duration></part></partlist>";
+	string test1correct = "";
+	assert(test1correct == s.XMLToStringConverter(test1));
 }
