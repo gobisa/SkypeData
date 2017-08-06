@@ -249,31 +249,26 @@ string SkypeUser::XMLToStringConverter(const string& xml) {
 
 
 	string plain_text_string = xml; //use this string to replace things
-	//FIXME, FUNCTION IS ALWAYS RETURNING BEFORE THIS POINT
-	std::cout << "plain_text_string declared" << std::endl;
+
+	//std::cout << "plain_text_string declared" << std::endl;
+
 	/*
-
-	//FIXME, TEST IF WORKING CORRECTLY
-	regex href_opening_tag("(<a href=)\\S+(\"\">)"); //matches opening href tag, from "<a href=" to '"">'
-	regex href_closing_tag("</a>"); //matches closing href tag, "</a>"
-	regex href_format("(<a href=)\\S+(</a>)"); //matches all text between (inclusive) "<a href=" and "/a>"
-	//(<a href)\S+(/a>) is the code on regex101, but I think two \ are needed for the S because
-
-
 	//http://www.cplusplus.com/reference/regex/
 	*/
 
-	//FIXME, NOT SURE IF THESE WORK
-	regex ss_opening_tag("<ss type=\\S+>");
+	//CORRECT REGEX
+	regex ss_opening_tag("<ss type=\\w*>");
 	regex ss_closing_tag("</ss>");
-	regex ss_format("(<ss type=)\\S+(</ss>)"); //unused
+	//regex ss_format("(<ss type=)\\S+(</ss>)"); //unused
 	plain_text_string = regex_replace(plain_text_string, ss_opening_tag, "");
 	plain_text_string = regex_replace(plain_text_string, ss_closing_tag, "");
 
-	//FIXME, TEST IF WORKING CORRECTLY
+
+
+	////CORRECT REGEX
 	regex href_opening_tag("(<a href=)\\S+(\"\">)"); //matches opening href tag, from "<a href=" to '"">'
 	regex href_closing_tag("</a>"); //matches closing href tag, "</a>"
-	regex href_format("(<a href=)\\S+(</a>)"); //matches all text between (inclusive) "<a href=" and "/a>"
+	regex href_format("(<a href=).*(</a>)"); //matches all text between (inclusive) "<a href=" and "/a>"
 	//GOOD									   //(<a href)\S+(/a>) is the code on regex101, but I think two \ are needed for the S because
 
 											   //FIXME, for now, we'll just ignore links when converting to text
@@ -283,18 +278,23 @@ string SkypeUser::XMLToStringConverter(const string& xml) {
 	//plain_text_string = regex_replace(plain_text_string, href_closing_tag, "");
 
 
-	//when user adds the bold, takes form: <b raw_pre=""*"" raw_post=""*""></b>
-	//when the skype bot adds bold, takes form: <b></b>
-	regex b_user_opening_tag("(<b raw_pre=).*(post=\"\"*\"\">)");
+	//CORRECT REGEX
+	//when user adds the bold, takes form: <b raw_pre=* raw_post=*></b>
+	//when the skype bot adds bold, takes form: <b><  / b>
+	regex b_user_opening_tag("(<b raw_pre).*(post = \\*>)");
 	regex b_bot_opening_tag("<b>");
-	regex b_user_closing_tag("</b>");
+	regex b_bot_closing_tag("</b>");
+	regex b_user_closing_tag("< / b>");
 	plain_text_string = regex_replace(plain_text_string, b_user_opening_tag, "");
 	plain_text_string = regex_replace(plain_text_string, b_bot_opening_tag, "");
+	plain_text_string = regex_replace(plain_text_string, b_bot_closing_tag, "");
 	plain_text_string = regex_replace(plain_text_string, b_user_closing_tag, "");
 
-	//should always take form: <i raw_pre=""_"" raw_post=""_"">
+
+	//CORRECT REGEX
+	//should always take form: <i raw_pre=_ raw_post=_>
 	//not encountered, but skype bot may use <i></i>
-	regex i_opening_tag("(<i raw_pre=).*(\"\">)");
+	regex i_opening_tag("(<i raw_pre).*(post=_>)");
 	regex i_bot_opening_tag("<i>");
 	regex i_closing_tag("</i>");
 	plain_text_string = regex_replace(plain_text_string, i_opening_tag, "");
@@ -321,16 +321,19 @@ string SkypeUser::XMLToStringConverter(const string& xml) {
 	</pa and <par are the start of tags for both <part> and <partlist>, and <part> tags are within partlist tags
 	*/
 
-	regex s_opening_tag("(<s raw_pre=)\\S+(\"\">)");
+	//GOOD REGEX
+	regex s_opening_tag("(<s raw_pre).*(= ~>)");
 	regex s_bot_opening_tag("<s>");
-	regex s_closing_tag("</s>");
+	regex s_closing_tag("< / s>");
 	plain_text_string = regex_replace(plain_text_string, s_opening_tag, "");
 	plain_text_string = regex_replace(plain_text_string, s_bot_opening_tag, "");
 	plain_text_string = regex_replace(plain_text_string, s_closing_tag, "");
 
+
+	//GOOD REGEX
 	//br doesn't have opening and closing tags, it only acts as a line break
 	regex br_tag("<br/>");
-	plain_text_string = regex_replace(plain_text_string, br_tag, "");
+	plain_text_string = regex_replace(plain_text_string, br_tag, " ");
 
 
 	//quo is a quote tag, when you copy and paste someone else
@@ -347,10 +350,11 @@ string SkypeUser::XMLToStringConverter(const string& xml) {
 	&lt;&lt;&lt; </legacyquote></quote>matai this is literally the reason you said you wouldn&apos;t play multiplayer with me"
 	*/
 
+	//GOOD REGEX
 	//NOTE: DOES NOT FULLY DEAL WITH THE TEXT WITHIN THE QUOTE TAGS
 	//FIXME, NOT SURE IF THIS IS RIGHT
 	//FIXME, I AM COUNTING QUOTES TOWARD THE QUOTER'S VOCABULARY
-	regex quote_opening_tag("<quote.*>"); //matches anything from <quote to >
+	regex quote_opening_tag("<quote(.*)</legacyquote>"); //matches anything from <quote to >
 	/*
 	matches:
 	<quote author=""andrius.gobis"" authorname=""Andrius Gobis"" conversation=""19:6231efe89fc74b3884799e8c68c75912@thread.skype"" guid=""x50b30ee4
@@ -358,8 +362,8 @@ string SkypeUser::XMLToStringConverter(const string& xml) {
 	*/
 	plain_text_string = regex_replace(plain_text_string, quote_opening_tag, "");
 	//deal with /qu
-	regex quote_closing_tag("</quote>");
-	plain_text_string = regex_replace(plain_text_string, quote_closing_tag, "");
+	regex quote_closing_tag("<legacyquote> &lt; &lt; &lt; < / legacyquote>< / quote>");
+	plain_text_string = regex_replace(plain_text_string, quote_closing_tag, " ");
 
 	//deal with legacyquote
 	/*
