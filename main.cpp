@@ -66,6 +66,8 @@ void test_XMLToStringConverter();
 
 int main(int argc, char** argv) {
 
+	//test_XMLToStringConverter(); //passed
+
 	//read in second argument as file name
 	//string file_name = argv[1];
 
@@ -108,7 +110,7 @@ int main(int argc, char** argv) {
 			bug_counter++; //FIXME, ONLY FOR TESTING
 		}
 		
-
+		//TODO: EXPORT COUT TEXT TO FILE, SEARCH FOR STUFF LIKE LEGACY QUOTE AND XML SPECIAL CHARS FOR BUGS
 
 		//analyze data
 		for (SkypeUser* user : skype_users) {
