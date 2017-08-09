@@ -144,10 +144,10 @@ void SkypeUser::sortData() {
 	*/
 
 	for (auto row : rows) {
-		std::cout << "raw xml: " << row["replace(body_xml, CHAR(10), '')"] << std::endl;
+		//std::cout << "raw xml: " << row["replace(body_xml, CHAR(10), '')"] << std::endl;
 		raw_xml_messages.push_back(row["replace(body_xml, CHAR(10), '')"]);
 		string parsed_text = XMLToStringConverter(row["replace(body_xml, CHAR(10), '')"]);
-		std::cout << "parsed_text: " << parsed_text << std::endl;
+		//std::cout << "parsed_text: " << parsed_text << std::endl;
 		parsed_messages.push_back(parsed_text);
 		
 		if (row["edited_by"] == name) {
@@ -192,7 +192,7 @@ void SkypeUser::analyzeData() {
 		//emoji_count
 		//want to extract emoji between the tags
 		//find emojis //<ss type=""cat"">:3</ss>, <ss type=""like"">(like)</ss>
-		regex emoji_format("<ss type=\"\"[[:alpha:]]+\"\">"); //closing: "</ss>"
+		regex emoji_format("<ss type=[[:alpha:]]+>"); //closing: "</ss>"
 		//FIXME
 		//https://stackoverflow.com/questions/12908534/retrieving-a-regex-search-in-c
 
@@ -235,7 +235,7 @@ string SkypeUser::XMLToStringConverter(const string& xml) {
 
 	//FIXME, when message has a comma, it starts with quotes in the csv
 
-	std::cout << "xml: " << xml << std::endl;
+	//std::cout << "xml: " << xml << std::endl;
 
 	//no xml tags
 	//FIXME, MAY NEED TO UNREMOVE
@@ -281,7 +281,8 @@ string SkypeUser::XMLToStringConverter(const string& xml) {
 	//CORRECT REGEX
 	//when user adds the bold, takes form: <b raw_pre=* raw_post=*></b>
 	//when the skype bot adds bold, takes form: <b><  / b>
-	regex b_user_opening_tag("(<b raw_pre).*(post = \\*>)");
+	//regex b_user_opening_tag("(<b raw_pre).*(post = \\*>)");
+	regex b_user_opening_tag("(<b raw_pre).*(post=\\*>)");
 	regex b_bot_opening_tag("<b>");
 	regex b_bot_closing_tag("</b>");
 	regex b_user_closing_tag("< / b>");
@@ -322,9 +323,10 @@ string SkypeUser::XMLToStringConverter(const string& xml) {
 	*/
 
 	//GOOD REGEX
-	regex s_opening_tag("(<s raw_pre).*(= ~>)");
+	//regex s_opening_tag("(<s raw_pre).*(= ~>)");
+	regex s_opening_tag("(<s raw_pre).*(=~>)");
 	regex s_bot_opening_tag("<s>");
-	regex s_closing_tag("< / s>");
+	regex s_closing_tag("</s>");
 	plain_text_string = regex_replace(plain_text_string, s_opening_tag, "");
 	plain_text_string = regex_replace(plain_text_string, s_bot_opening_tag, "");
 	plain_text_string = regex_replace(plain_text_string, s_closing_tag, "");
@@ -362,7 +364,8 @@ string SkypeUser::XMLToStringConverter(const string& xml) {
 	*/
 	plain_text_string = regex_replace(plain_text_string, quote_opening_tag, "");
 	//deal with /qu
-	regex quote_closing_tag("<legacyquote> &lt; &lt; &lt; < / legacyquote>< / quote>");
+	//regex quote_closing_tag("<legacyquote> &lt; &lt; &lt; < / legacyquote>< / quote>");
+	regex quote_closing_tag("<legacyquote>\\s\\s&lt;&lt;&lt; </legacyquote></quote>");
 	plain_text_string = regex_replace(plain_text_string, quote_closing_tag, " ");
 
 	//deal with legacyquote
