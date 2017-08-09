@@ -183,21 +183,28 @@ void SkypeUser::analyzeData() {
 	//vocab_size
 	vocab_size = vocabulary_count.size();
 
-	//FIXME, FOR DEBUGGING
-	std::cout << vocab_size << std::endl;
 
-
+	//correctly counts emojis
 	for (auto msg : raw_xml_messages) {
 
-		//emoji_count
-		//want to extract emoji between the tags
-		//find emojis //<ss type=""cat"">:3</ss>, <ss type=""like"">(like)</ss>
-		regex emoji_format("<ss type=[[:alpha:]]+>"); //closing: "</ss>"
-		//FIXME
 		//https://stackoverflow.com/questions/12908534/retrieving-a-regex-search-in-c
 
+		//emoji_count, just need to count ss tags
+		
+		regex emoji_format("<ss type="); //closing: "</ss>"		
+		std::smatch match;
 
+		std::regex_search(msg, match, emoji_format);
+
+		skype_emoji_count += match.size();
+
+
+		//find emojis //<ss type=""cat"">:3</ss>, <ss type=""like"">(like)</ss>
+		//also need to populate emoji_count map
 	}
+
+
+
 }
 
 
