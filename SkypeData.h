@@ -66,7 +66,7 @@ private:
 	int bad_words_count;
 	int punctuation_count;
 	int link_count;
-	int skype_emoji_count;
+	int skype_emoji_count; //use raw xml to check for <ss tags
 	int negative_words_count;
 	int positive_words_count;
 };
