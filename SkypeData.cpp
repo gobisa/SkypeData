@@ -7,6 +7,7 @@
 #include <string>
 #include <set>
 #include <regex>
+//#include <iterator>
 //#include <regex.h>
 #include <sstream>
 
@@ -163,7 +164,7 @@ void SkypeUser::analyzeData() {
 
 	string word;
 
-	for (auto msg : parsed_messages) {
+	for (const auto& msg : parsed_messages) {
 		std::cout << msg << std::endl;
 		//vocabulary_count, word_count
 		stringstream message(msg);
@@ -185,21 +186,72 @@ void SkypeUser::analyzeData() {
 
 
 	//correctly counts emojis
-	for (auto msg : raw_xml_messages) {
+	for (const auto& msg : raw_xml_messages) {
 
+		//http://en.cppreference.com/w/cpp/regex/regex_iterator
 		//https://stackoverflow.com/questions/12908534/retrieving-a-regex-search-in-c
 
+		//has three groups: the opening tag, the emoji in plain text, and the closing tag
+		regex emoji_format("(<ss type=[a-z]+>)(\\S+(?=</ss>))(</ss>)");
+
+		//iterates through the different matches of emojis
+		auto first_emoji_match = std::sregex_iterator(msg.begin(), msg.end(), emoji_format);
+		auto last_emoji_match = std::sregex_iterator(); //end iterator
+
+		//distance finds number of matches (ie, if 1 emoji found, then it would return the distance between 0(the emoji) and 1(end iterator)
+		skype_emoji_count += std::distance(first_emoji_match, last_emoji_match);
+
+		//loops through each match, and adds only the emoji group of the match to the emoji_count map
+		for (std::sregex_iterator i = first_emoji_match; i != last_emoji_match; ++i) {
+			std::smatch emoji_match = *i;
+			if (emoji_count.find(emoji_match[2]) == emoji_count.end()) {
+				emoji_count[emoji_match[2]] = 1;
+			}
+			else ++emoji_count[emoji_match[2]];
+		}
+
+
+
+
+		/*
 		//emoji_count, just need to count ss tags
 		
-		regex emoji_format("<ss type="); //closing: "</ss>"		
+		regex emoji_opening("<ss type="); //closing: "</ss>"		
 		std::smatch match;
 
-		std::regex_search(msg, match, emoji_format);
+		//if true, an emoji was found
+		if (std::regex_search(msg, match, emoji_opening)) {
+			for (int i = 0; i < match.size(); ++i) {
+				std::cout << i << ": " << match[i] << "\n";
+			}
 
-		skype_emoji_count += match.size();
+			//add number of emojis to emoji count
+			skype_emoji_count += match.size();
+			std::cout << "skype_emoji_count: " << skype_emoji_count << "\n";
+
+			//only execute this code if the message has an emoji
+			//add which emoji is used
+			regex emoji_format("(<ss type=[a-z]+>)(\\S+(?=</ss>))(</ss>)");
+			std::smatch emojis_match;
+
+			//regex_search populates match with the full match, then all groups of the match
+			std::regex_search(msg, emojis_match, emoji_format);
+			if (emoji_count.find(emojis_match[2]) == emoji_count.end()) {
+				for (int i = 0; i < emojis_match.size(); ++i) {
+					std::cout << i << ": " << emojis_match[i] << "\n";
+				}
+				emoji_count[emojis_match[2]] = 1;
+				std::cout << emojis_match[2] << "findme\n\n";
+			}
+			else ++emoji_count[emojis_match[2]];
+		}
+		*/
 
 
-		//find emojis //<ss type=""cat"">:3</ss>, <ss type=""like"">(like)</ss>
+
+		
+
+		//find emojis //<ss type=""cat"">:3</ss>, <ss type=like>(like)</ss> <ss type=inlove>(inlove)</ss>
 		//also need to populate emoji_count map
 	}
 
