@@ -144,6 +144,21 @@ int main(int argc, char** argv) {
 	//open "positive_words.txt"
 	//open "bad_words.txt"
 
+	ifstream negative_words_file("negative_words.txt");
+	if (negative_words_file.is_open()) {
+
+	}
+
+	ifstream positive_words_file("positive_words.txt");
+	if (positive_words_file.is_open()) {
+
+	}
+
+	ifstream bad_words_file("bad_words.txt");
+	if (bad_words_file.is_open()) {
+
+	}
+
 
 
 
