@@ -164,17 +164,21 @@ void SkypeUser::analyzeData() {
 
 	string word;
 
-	//vocabulary_count, word_count
+	//vocabulary_count, word_count, punctuation_count
 	for (const auto& msg : parsed_messages) {
 		std::cout << msg << std::endl;
 		//vocabulary_count, word_count
 		stringstream message(msg);
 		while (message >> word) {
-			//FIXME, need to fix to make sure punctuation is not included when adding to vocab, also need to remove XMLspecialChars
+			
 			//parse xmlspecialchartostring, then remove punctuation 
 			//must be in this order so that xml isn't removed as punct
 			word = XMLSpecialCharToString(word);
+			string word_with_punctuation = word;
 			word = removePunctuation(word);
+			//punctuation_count
+			if (word != word_with_punctuation) ++punctuation_count;
+
 			if (vocabulary_count.find(word) == vocabulary_count.end()) { //word not found
 				vocabulary_count[word] = 0;
 			}
