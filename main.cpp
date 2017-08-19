@@ -71,7 +71,7 @@ void testFunctions();
 int main(int argc, char** argv) {
 
 
-	//testFunctions(); passed
+	testFunctions();
 
 
 	//test_XMLToStringConverter(); //passed
@@ -452,6 +452,14 @@ void testFunctions() {
 	std::cout << test.removePunctuation(",hello,");
 	assert(test.removePunctuation(",hello,") == "hello");
 
+
+	assert(test.XMLSpecialCharToString("don&apos;t") == "don't");
+	assert(test.XMLSpecialCharToString("What&apos;s") == "What's");
+	assert(test.XMLSpecialCharToString("&lt;") == "<");
+	assert(test.XMLSpecialCharToString("a&amp;p") == "a&p");
+	assert(test.XMLSpecialCharToString("&gt;") == ">");
+	assert(test.XMLSpecialCharToString("&quot;oh&quot;") == "\"oh\"");
+	//above all passed
 }
 
 
