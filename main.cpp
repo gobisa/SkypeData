@@ -13,13 +13,14 @@ number of skype emojis
 
 
 References:
-negative_words.txt and positive_words.txt:
+-negative_words.txt and positive_words.txt:
 	Minqing Hu and Bing Liu. "Mining and Summarizing Customer Reviews."
 		Proceedings of the ACM SIGKDD International Conference on Knowledge
 		Discovery and Data Mining (KDD-2004), Aug 22-25, 2004, Seattle,
 		Washington, USA.
-bad_words.txt: http://fffff.at/googles-official-list-of-bad-words/
-csvstrea.h by Andrew DeOrio <awdeorio@umich.edu>, https://github.com/awdeorio/csvstream
+-bad_words.txt: http://fffff.at/googles-official-list-of-bad-words/
+-csvstream.h by Andrew DeOrio <awdeorio@umich.edu>, https://github.com/awdeorio/csvstream
+-SOCI - The C++ Database Access Library taken from http://soci.sourceforge.net/index.html
 rapidxml*.hpp: http://rapidxml.sourceforge.net/, http://rapidxml.sourceforge.net/license.txt
 */
 
@@ -38,6 +39,8 @@ rapidxml*.hpp: http://rapidxml.sourceforge.net/, http://rapidxml.sourceforge.net
 #include <fstream>
 #include <regex>
 #include <cassert>
+//#include "soci.h"
+//#include "soci-3.2.3"
 
 using std::string;
 using std::cout;
@@ -63,8 +66,13 @@ string storeDataFromXMLString(const string& xml_message);
 */
 
 void test_XMLToStringConverter();
+void testFunctions();
 
 int main(int argc, char** argv) {
+
+
+	//testFunctions(); passed
+
 
 	//test_XMLToStringConverter(); //passed
 
@@ -439,11 +447,15 @@ string personalTextFormatter(const string& unformatted_string) {
 
 
 void testFunctions() {
+	//test SkypeUser::removePunctuation
+	SkypeUser test("test");
+	std::cout << test.removePunctuation(",hello,");
+	assert(test.removePunctuation(",hello,") == "hello");
 
 }
 
 
-//FIXME
+//FIXME, unused
 string storeDataFromXMLString(const string& xml_message) {
 
 	stringstream ss_xml_message(xml_message);
