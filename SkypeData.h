@@ -73,8 +73,9 @@ private:
 	int skype_emoji_count; //use raw xml to check for <ss tags *****
 	int negative_words_count;
 	int positive_words_count;
-	int positive_message_count;
 	int negative_message_count;
+	int positive_message_count;
+	
 };
 
 
