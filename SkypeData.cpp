@@ -170,10 +170,11 @@ void SkypeUser::analyzeData() {
 		//vocabulary_count, word_count
 		stringstream message(msg);
 		while (message >> word) {
-			//std::cout << word << std::endl;
+			//FIXME, need to fix to make sure punctuation is not included when adding to vocab, also need to remove XMLspecialChars
 			//parse xmlspecialchartostring, then remove punctuation 
-			//must be in this order so that xml isn't removed as punct			
-			word = removePunctuation(XMLSpecialCharToString(word));
+			//must be in this order so that xml isn't removed as punct
+			word = XMLSpecialCharToString(word);
+			word = removePunctuation(word);
 			if (vocabulary_count.find(word) == vocabulary_count.end()) { //word not found
 				vocabulary_count[word] = 0;
 			}
@@ -424,7 +425,7 @@ string SkypeUser::XMLToStringConverter(const string& xml) {
 
 
 
-//FIXME, WRITE TEST CASES
+//FIXME, WRITE TEST CASES, this doesnt work
 /*
 REQUIRES:	xml_word is a single word, with no spaces
 MODIFIES:	nothing
@@ -442,19 +443,19 @@ string SkypeUser::XMLSpecialCharToString(const string& xml_word) {
 		//loop until all occurrences are found
 		while (pos != parsed_word.npos) {
 			if (special_char == "&lt;") {
-				parsed_word.replace(pos, pos + 4, "<");
+				parsed_word.replace(pos, 4, "<");
 			}
 			else if (special_char == "&amp;") {
-				parsed_word.replace(pos, pos + 5, "&");
+				parsed_word.replace(pos, 5, "&");
 			}
 			else if (special_char == "&gt;") {
-				parsed_word.replace(pos, pos + 4, ">");
+				parsed_word.replace(pos, 4, ">");
 			}
 			else if (special_char == "&quot;") {
-				parsed_word.replace(pos, pos + 6, "\"");
+				parsed_word.replace(pos, 6, "\"");
 			}
 			else if (special_char == "&apos;") {
-				parsed_word.replace(pos, pos + 6, "'");
+				parsed_word.replace(pos, 6, "'");
 			}
 			pos = parsed_word.find(special_char, pos); //try to find next instance in the word
 		}
