@@ -51,6 +51,8 @@ public:
 	string removePunctuation(const string& text);
 
 private:
+
+	//filled using sortData()
 	// "//" means that the variable is calculated/there is code to fill in the variable
 	string name; //
 	vector<csvstream::row_type> rows; //
@@ -59,17 +61,20 @@ private:
 	int num_posts; //
 	int num_edits; //
 
+	//filled using analyzeData()
 	//***** means that the variable is calculated/there is code to fill in the variable
-	map<string, int> vocabulary_count; //unique word frequencies //use plain text *****
+	map<string, int> vocabulary_count; //unique word frequencies //use plain text ***** //FIXME, I THINK THIS INCLUDES PUNCTUATION
 	map<string, int> emoji_count; //unique emoji frequencies //should use xml *****
 	int word_count; //total words, non unique *****
 	int vocab_size; //number of unique words, = vocabulary_count.size() *****
 	int bad_words_count; //ie swear words
-	int punctuation_count;
+	int punctuation_count; //*****
 	int link_count; //*****
 	int skype_emoji_count; //use raw xml to check for <ss tags *****
 	int negative_words_count;
 	int positive_words_count;
+	int positive_message_count;
+	int negative_message_count;
 };
 
 
