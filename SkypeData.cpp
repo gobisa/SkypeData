@@ -164,6 +164,7 @@ void SkypeUser::analyzeData() {
 
 	string word;
 
+	//vocabulary_count, word_count
 	for (const auto& msg : parsed_messages) {
 		std::cout << msg << std::endl;
 		//vocabulary_count, word_count
@@ -185,7 +186,7 @@ void SkypeUser::analyzeData() {
 	vocab_size = vocabulary_count.size();
 
 
-	//correctly counts emojis
+	//emoji_count, skype_emoji_count, link_count
 	for (const auto& msg : raw_xml_messages) {
 
 		//http://en.cppreference.com/w/cpp/regex/regex_iterator
@@ -211,49 +212,20 @@ void SkypeUser::analyzeData() {
 		}
 
 
+		//link_count
+		regex link_format("<a href=");
 
+		auto first_link_match = std::sregex_iterator(msg.begin(), msg.end(), link_format);
+		auto last_link_match = std::sregex_iterator();
 
-		/*
-		//emoji_count, just need to count ss tags
-		
-		regex emoji_opening("<ss type="); //closing: "</ss>"		
-		std::smatch match;
+		link_count += std::distance(first_link_match, last_link_match);
 
-		//if true, an emoji was found
-		if (std::regex_search(msg, match, emoji_opening)) {
-			for (int i = 0; i < match.size(); ++i) {
-				std::cout << i << ": " << match[i] << "\n";
-			}
-
-			//add number of emojis to emoji count
-			skype_emoji_count += match.size();
-			std::cout << "skype_emoji_count: " << skype_emoji_count << "\n";
-
-			//only execute this code if the message has an emoji
-			//add which emoji is used
-			regex emoji_format("(<ss type=[a-z]+>)(\\S+(?=</ss>))(</ss>)");
-			std::smatch emojis_match;
-
-			//regex_search populates match with the full match, then all groups of the match
-			std::regex_search(msg, emojis_match, emoji_format);
-			if (emoji_count.find(emojis_match[2]) == emoji_count.end()) {
-				for (int i = 0; i < emojis_match.size(); ++i) {
-					std::cout << i << ": " << emojis_match[i] << "\n";
-				}
-				emoji_count[emojis_match[2]] = 1;
-				std::cout << emojis_match[2] << "findme\n\n";
-			}
-			else ++emoji_count[emojis_match[2]];
-		}
-		*/
-
-
-
-		
-
-		//find emojis //<ss type=""cat"">:3</ss>, <ss type=like>(like)</ss> <ss type=inlove>(inlove)</ss>
-		//also need to populate emoji_count map
 	}
+
+
+
+	
+	
 
 
 
@@ -505,10 +477,8 @@ string SkypeUser::personalTextFormatter(const string& unformatted_string) {
 
 
 //removes any prefix or postfix punctuation
-//FIXME, check for correctness
+//works correctly
 string SkypeUser::removePunctuation(const string& word) {
 	regex punct("^[[:punct:]]+|[[:punct:]]+$");
-	string removed = word;
-	regex_replace(removed, punct, "");
-	return removed;
+	return regex_replace(word, punct, "");
 }
