@@ -53,6 +53,7 @@ using std::ifstream;
 using std::regex;
 using std::regex_replace;
 using std::stringstream;
+using std::getline;
 
 //http://www.sqlapi.com/ use this to get sql into this program so that only the .db file has to be used
 //https://www.tutorialspoint.com/sqlite/sqlite_c_cpp.htm THIS ONE LOOKS BETTER
@@ -73,21 +74,39 @@ int main(int argc, char** argv) {
 
 	//testFunctions();
 
+	int line_count_for_testing = 0;
+	string entry;
 
+	//get negative word set from file
+	set<string> negative_words;
 	ifstream negative_words_file("negative_words.txt");
 	if (negative_words_file) {
-		
+		while (getline(negative_words_file, entry)) {
+			//if statement needed to ignore header of file
+			if (entry[0] != ';') {
+				negative_words.insert(entry);
+			}
+		}
 	}
 	negative_words_file.close();
 
-
+	
+	//get positive word set from file
+	set<string> positive_words;
 	ifstream positive_words_file("positive_words.txt");
 	if (positive_words_file) {
-		
+		while (getline(positive_words_file, entry)) {
+			//if statement needed to ignore header of file
+			if (entry[0] != ';') {
+				positive_words.insert(entry);
+			}
+		}
 	}
 	positive_words_file.close();
 
 
+
+	set<string> bad_words;
 	ifstream bad_words_file("bad_words.txt");
 	if (bad_words_file) {
 		
