@@ -44,7 +44,7 @@ public:
 	SkypeUser(const string& name_in);
 	void addRow(csvstream::row_type row);
 	void sortData(); //fills in raw_xml_messages, parsed_messages, num_posts, num_edits
-	void analyzeData();  //does vocabulary_count, emoji_count, word_count, vocab_size, link_count, skype_emoji_count
+	void analyzeData(const set<string>& neg_words, const set<string>& pos_words, const set<string>& bad_words);  //does vocabulary_count, emoji_count, word_count, vocab_size, link_count, skype_emoji_count
 	string XMLToStringConverter(const string& xml);
 	string XMLSpecialCharToString(const string& xml_word);
 	string personalTextFormatter(const string& unformatted_string);
@@ -75,6 +75,7 @@ private:
 	int positive_words_count;
 	int negative_message_count;
 	int positive_message_count;
+	int bad_word_message_count;
 	
 };
 
