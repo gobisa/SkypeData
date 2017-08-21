@@ -122,7 +122,8 @@ SkypeData::~SkypeData() {
 SkypeUser::SkypeUser(const string& name_in)
 	: name(name_in), num_posts(0), num_edits(0), word_count(0), vocab_size(0),
 	bad_words_count(0), punctuation_count(0), link_count(0), skype_emoji_count(0),
-	negative_words_count(0), positive_words_count(0), negative_message_count(0), positive_message_count(0) {}
+	negative_words_count(0), positive_words_count(0), negative_message_count(0), 
+	positive_message_count(0), bad_word_message_count(0) {}
 
 void SkypeUser::addRow(csvstream::row_type row) {
 	rows.push_back(row);
@@ -161,7 +162,7 @@ void SkypeUser::sortData() {
 	
 }
 
-void SkypeUser::analyzeData() {
+void SkypeUser::analyzeData(const set<string>& neg_words, const set<string>& pos_words, const set<string>& bad_words) {
 
 	string word;
 
