@@ -107,7 +107,7 @@ int main(int argc, char** argv) {
 
 
 	set<string> bad_words;
-	ifstream bad_words_file("bad_words.txt");
+	ifstream bad_words_file("bad_words_edited.txt");
 	if (bad_words_file) {
 		
 	}
