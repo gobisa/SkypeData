@@ -109,25 +109,35 @@ int main(int argc, char** argv) {
 	set<string> bad_words;
 	ifstream bad_words_file("bad_words_edited.txt");
 	if (bad_words_file) {
-		
+		while (bad_words_file >> entry) {
+			bad_words.insert(entry);
+		}
 	}
 	bad_words_file.close();
+
+	//FIXME, CAN REMOVE
+	//USED FOR TESTING, FILE READING PASSES THE TESTS
+	/*
+	std::ofstream test_file_reading("test.txt");
+	for (const auto& w : negative_words) {
+		test_file_reading << w << "\n";
+	}
+	for (const auto& w : positive_words) {
+		test_file_reading << w << "\n";
+	}
+	for (const auto& w : bad_words) {
+		test_file_reading << w << "\n";
+	}
+	test_file_reading.close();
+	return 0;
+	*/
+
+
 
 
 	//test_XMLToStringConverter(); //passed
 
-	//read in second argument as file name
-	//string file_name = argv[1];
-
-	/*
-	xml_document<> doc;
-	xml_node<> * root_node;
-	ifstream my_skype_data("skype_data.csv");
-	*/
-
-	//test_XMLToStringConverter();
 	
-	//use this one to 
 	try {
 		//column names are: author,edited_by,body_xml
 		//"replace(body_xml, CHAR(10), '')"
@@ -176,45 +186,7 @@ int main(int argc, char** argv) {
 		exit(EXIT_FAILURE);
 	}
 
-	//ifstream file_with_xml("")
 
-	//doc.parse<>(test_c);
-
-	//open "negative_words.txt"
-	//open "positive_words.txt"
-	//open "bad_words.txt"
-
-
-
-
-
-
-
-
-
-	/*
-	tinyxml2::XMLDocument doc;
-	doc.LoadFile("skype_data.csv");
-	doc.SaveFile("skype_data_parsed.csv");
-	*/
-
-
-	/*
-	try {
-		tinyxml2::XMLDocument doc;
-		doc.LoadFile("skype_data.csv");
-		doc.SaveFile("skype_data_parsed.csv");
-
-
-		csvstream skype_data("skype_data_parsed.csv");
-
-		//collect data
-	}
-	catch (csvstream_exception e) {
-		cout << "Unable to open file... quiting\n";
-		exit(EXIT_FAILURE);
-	}
-	*/
 
 	cout << "Finished\n";
 	return 0;
