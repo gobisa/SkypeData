@@ -119,7 +119,7 @@ int main(int argc, char** argv) {
 		//"replace(body_xml, CHAR(10), '')"
 		//author,edited_by,"replace(body_xml, CHAR(10), '')"
 		//FIXME, REPLACE FILE WITH "main_csv.csv" FOR FINAL UPLOAD
-		csvstream skype_data("main_csv.csv"); 
+		csvstream skype_data("main.csv"); 
 		csvstream::row_type row;
 
 
