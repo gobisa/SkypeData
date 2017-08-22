@@ -286,7 +286,7 @@ void SkypeUser::outputData(std::ofstream& output_file) {
 				<< "\n";
 	*/
 	if (num_edits != 0) {
-		output_file << name << "," << num_posts << "," << num_edits << "," << num_posts / (double) num_edits << "," << word_count << "," << vocab_size << ",";
+		output_file << name << "," << num_posts << "," << num_edits << "," << num_edits / (double) num_posts << "," << word_count << "," << vocab_size << ",";
 	}
 	else {
 		output_file << name << "," << num_posts << "," << num_edits << "," << "undef." << "," << word_count << "," << vocab_size << ",";
