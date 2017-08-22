@@ -149,7 +149,7 @@ int main(int argc, char** argv) {
 				<< "Negative Word Count,Positive Word Count,Bad Word Count,"
 				<< "Negative Messages, Positive Messages, Messages with Bad Word,"
 				<< "Negative Message Frequency, Positive Message Frequency, Message with Bad Word Frequency"
-				<< "Top 3 Emojis, Top 3 Words"
+				<< "Top 3 Emojis (count), Top 3 Words (count)"
 				<< "\n";
 		}
 
