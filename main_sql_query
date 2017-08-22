@@ -1,0 +1,1 @@
+SELECT author,edited_by,replace(body_xml,CHAR(10),'') FROM messages ORDER BY author
