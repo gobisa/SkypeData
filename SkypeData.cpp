@@ -166,7 +166,11 @@ void SkypeUser::analyzeData(const set<string>& neg_words, const set<string>& pos
 
 	string word;
 
-	//vocabulary_count, word_count, punctuation_count
+	int negative_word_score = 0;
+	int positive_word_score = 0;
+	bool contains_bad_word = false;
+
+	//vocabulary_count, word_count, punctuation_count, negative_message_count, positive_message_count, bad_word_message_count
 	for (const auto& msg : parsed_messages) {
 		std::cout << msg << std::endl;
 		//vocabulary_count, word_count
@@ -181,12 +185,26 @@ void SkypeUser::analyzeData(const set<string>& neg_words, const set<string>& pos
 			//punctuation_count
 			if (word != word_with_punctuation) ++punctuation_count;
 
-			if (vocabulary_count.find(word) == vocabulary_count.end()) { //word not found
+			//if word not already found in vocabulary
+			if (vocabulary_count.find(word) == vocabulary_count.end()) { 
 				vocabulary_count[word] = 0;
 			}
 			++vocabulary_count[word];
 			++word_count;
+
+
+			//negative, positive, and bad words
+			if (neg_words.find(word) != neg_words.end()) ++negative_word_score;
+			if (pos_words.find(word) != pos_words.end()) ++positive_word_score;
+			if (bad_words.find(word) != bad_words.end()) contains_bad_word = true;
+
 		}
+
+		//negative_message_count, positive_message_count
+		if (negative_word_score > positive_word_score) ++negative_message_count;
+		else if (positive_word_score > negative_word_score)	++positive_message_count;
+		//bad_word_message_count
+		if (contains_bad_word) ++bad_word_message_count;
 	}
 
 	//vocab_size
@@ -229,6 +247,25 @@ void SkypeUser::analyzeData(const set<string>& neg_words, const set<string>& pos
 
 	}
 
+
+	//negative_words_count, positive_words_count, bad_words_count
+	for (const std::pair<string, int>& vocab_count : vocabulary_count) {
+
+		//if vocab word is in neg_words
+		if (neg_words.find(vocab_count.first) != neg_words.end()) {
+			negative_words_count += vocab_count.second;
+		}
+		//if vocab word is in pos_words
+		if (pos_words.find(vocab_count.first) != pos_words.end()) {
+			positive_words_count += vocab_count.second;
+		}
+		//if vocab word is in bad_words
+		if (bad_words.find(vocab_count.first) != bad_words.end()) {
+			bad_words_count += vocab_count.second;
+		}
+	}
+
+	
 
 
 	
