@@ -50,6 +50,7 @@ using std::vector;
 //using rapidxml::xml_document;
 //using rapidxml::xml_node;
 using std::ifstream;
+using std::ofstream;
 using std::regex;
 using std::regex_replace;
 using std::stringstream;
@@ -71,10 +72,6 @@ void testFunctions();
 
 int main(int argc, char** argv) {
 
-
-	//testFunctions();
-
-	int line_count_for_testing = 0;
 	string entry;
 
 	//get negative word set from file
@@ -115,28 +112,6 @@ int main(int argc, char** argv) {
 	}
 	bad_words_file.close();
 
-	//FIXME, CAN REMOVE
-	//USED FOR TESTING, FILE READING PASSES THE TESTS
-	/*
-	std::ofstream test_file_reading("test.txt");
-	for (const auto& w : negative_words) {
-		test_file_reading << w << "\n";
-	}
-	for (const auto& w : positive_words) {
-		test_file_reading << w << "\n";
-	}
-	for (const auto& w : bad_words) {
-		test_file_reading << w << "\n";
-	}
-	test_file_reading.close();
-	return 0;
-	*/
-
-
-
-
-	//test_XMLToStringConverter(); //passed
-
 	
 	try {
 		//column names are: author,edited_by,body_xml
@@ -155,7 +130,6 @@ int main(int argc, char** argv) {
 
 		//create all users and fill vector rows
 		int user_index = -1;
-		int bug_counter = 0; //FIXME, ONLY FOR TESTING
 		while (skype_data >> row) {
 		
 			if (authors.insert(row["author"]).second) {//new author
@@ -164,17 +138,29 @@ int main(int argc, char** argv) {
 			}
 
 			skype_users[user_index]->addRow(row);
-
-			bug_counter++; //FIXME, ONLY FOR TESTING
 		}
-		
-		//TODO: EXPORT COUT TEXT TO FILE, SEARCH FOR STUFF LIKE LEGACY QUOTE AND XML SPECIAL CHARS FOR BUGS
+
+
+		ofstream output_file("SkypeDataResults.csv");
+		if (output_file) {
+			output_file << "Name,Post Count,Edits Made,Edit Percentage,Word Count,Unique Words,"
+				<< "Punctuation Count,Average Punctuation per Message, Link Count,"
+				<< "Average Links per Message,Emoji Count,Average Emojis per Message,"
+				<< "Negative Word Count,Positive Word Count,Bad Word Count,"
+				<< "Negative Messages, Positive Messages, Messages with Bad Word,"
+				<< "Negative Message Frequency, Positive Message Frequency, Message with Bad Word Frequency"
+				<< "Top 3 Emojis, Top 3 Words"
+				<< "\n";
+		}
 
 		//analyze data
 		for (SkypeUser* user : skype_users) {
 			user->sortData();
-			user->analyzeData();
+			user->analyzeData(negative_words, positive_words, bad_words);
+			user->outputData(output_file);
 		}
+
+		output_file.close();
 
 		//delete dynamic memory
 		for (SkypeUser* user : skype_users) {
