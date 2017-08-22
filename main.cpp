@@ -118,12 +118,10 @@ int main(int argc, char** argv) {
 		//column names are: author,edited_by,body_xml
 		//"replace(body_xml, CHAR(10), '')"
 		//author,edited_by,"replace(body_xml, CHAR(10), '')"
-		csvstream skype_data("main_csv.csv"); //FIXME, MAKE SURE QUERY IS SORTED BY AUTHOR
+		//FIXME, REPLACE FILE WITH "main_csv.csv" FOR FINAL UPLOAD
+		csvstream skype_data("main_csv.csv"); 
 		csvstream::row_type row;
 
-		//for (auto header : skype_data.getheader()) {
-		//	cout << header << std::endl;
-		//}
 
 		set<string> authors;
 		vector<SkypeUser*> skype_users;
@@ -141,13 +139,13 @@ int main(int argc, char** argv) {
 			skype_users[user_index]->addRow(row);
 		}
 
-
+		//FIXME, REPLACE FILE WITH "SkypeDataResults.csv" FOR FINAL UPLOAD
 		ofstream output_file("SkypeDataResults.csv");
 		if (output_file) {
 
 			output_file << std::setprecision(3);
 
-			output_file << "Name,Post Count,Edits Made,Edit Percentage,Word Count,Unique Words,"
+			output_file << "Name,Post Count,Edits Made,Average Edits per Message,Word Count,Unique Words,"
 				<< "Punctuation Count,Average Punctuation per Message, Link Count,"
 				<< "Average Links per Message,Emoji Count,Average Emojis per Message,"
 				<< "Negative Word Count,Positive Word Count,Bad Word Count,"
@@ -164,14 +162,6 @@ int main(int argc, char** argv) {
 			}
 		}
 
-		/*
-		//analyze data
-		for (SkypeUser* user : skype_users) {
-			user->sortData();
-			user->analyzeData(negative_words, positive_words, bad_words);
-			user->outputData(output_file);
-		}
-		*/
 
 		output_file.close();
 
