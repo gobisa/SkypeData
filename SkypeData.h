@@ -45,10 +45,12 @@ public:
 	void addRow(csvstream::row_type row);
 	void sortData(); //fills in raw_xml_messages, parsed_messages, num_posts, num_edits
 	void analyzeData(const set<string>& neg_words, const set<string>& pos_words, const set<string>& bad_words);  //does vocabulary_count, emoji_count, word_count, vocab_size, link_count, skype_emoji_count
+	void outputData(std::ofstream& output_file);
 	string XMLToStringConverter(const string& xml);
 	string XMLSpecialCharToString(const string& xml_word);
 	string personalTextFormatter(const string& unformatted_string);
 	string removePunctuation(const string& text);
+	vector<std::pair<string, int>> getTop3FromMap(const map<string, int>& m);
 
 private:
 
