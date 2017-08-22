@@ -39,6 +39,7 @@ rapidxml*.hpp: http://rapidxml.sourceforge.net/, http://rapidxml.sourceforge.net
 #include <fstream>
 #include <regex>
 #include <cassert>
+#include <iomanip>
 //#include "soci.h"
 //#include "soci-3.2.3"
 
@@ -143,6 +144,9 @@ int main(int argc, char** argv) {
 
 		ofstream output_file("SkypeDataResults.csv");
 		if (output_file) {
+
+			output_file << std::setprecision(3);
+
 			output_file << "Name,Post Count,Edits Made,Edit Percentage,Word Count,Unique Words,"
 				<< "Punctuation Count,Average Punctuation per Message, Link Count,"
 				<< "Average Links per Message,Emoji Count,Average Emojis per Message,"
@@ -151,14 +155,23 @@ int main(int argc, char** argv) {
 				<< "Negative Message Frequency, Positive Message Frequency, Message with Bad Word Frequency"
 				<< "Top 3 Emojis (count), Top 3 Words (count)"
 				<< "\n";
+
+			//analyze data
+			for (SkypeUser* user : skype_users) {
+				user->sortData();
+				user->analyzeData(negative_words, positive_words, bad_words);
+				user->outputData(output_file);
+			}
 		}
 
+		/*
 		//analyze data
 		for (SkypeUser* user : skype_users) {
 			user->sortData();
 			user->analyzeData(negative_words, positive_words, bad_words);
 			user->outputData(output_file);
 		}
+		*/
 
 		output_file.close();
 
