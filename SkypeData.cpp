@@ -281,7 +281,7 @@ void SkypeUser::outputData(std::ofstream& output_file) {
 				<< "Negative Word Count,Positive Word Count,Bad Word Count,"
 				<< "Negative Messages, Positive Messages, Messages with Bad Word,"
 				<< "Negative Message Frequency, Positive Message Frequency, Message with Bad Word Frequency"
-				<< "Top 3 Emojis, Top 3 Words"
+				<< "Top 3 Emojis (count), Top 3 Words (count)"
 				<< "\n";
 	*/
 	output_file << name << "," << num_posts << "," << num_edits << "," << num_posts / num_edits << "," << word_count << "," << vocab_size << ",";
@@ -290,22 +290,47 @@ void SkypeUser::outputData(std::ofstream& output_file) {
 	output_file << negative_words_count << "," << positive_words_count << "," << bad_words_count << ",";
 	output_file << negative_message_count << "," << positive_message_count << "," << bad_word_message_count << ",";
 	output_file << negative_message_count / num_posts << "," << positive_message_count / num_posts << "," << bad_word_message_count / num_posts << ",";
-	
+	for (const std::pair<string, int>& p : getTop3FromMap(emoji_count)) {
+		output_file << "\"" << p.first << " (" << p.second << ") ";
+	}
+	output_file << "\",";
+	for (const std::pair<string, int>& p : getTop3FromMap(vocabulary_count)) {
+		output_file << "\"" << p.first << " (" << p.second << ") ";
+	}
+	output_file << "\"";
+	output_file << "\n";
 
 }
 
 
-vector<string> getTop3FromMap(const map<string, int>& m) {
+vector<std::pair<string, int>> SkypeUser::getTop3FromMap(const map<string, int>& m) {
 
-	vector<string> top3(3);
+	vector<std::pair<string, int>> top3(3);
 
-	std::pair<string, int> top1("", 0);
-	std::pair<string, int> top2("", 0);
-	std::pair<string, int> top3("", 0);
+	std::pair<string, int> first_word("", 0);
+	std::pair<string, int> second_word("", 0);
+	std::pair<string, int> third_word("", 0);
 
+	//compare each pair in the map to see if it is a higher frequency than the current top 3
 	for (const std::pair<string, int>& p : m) {
-
+		if (p.second > first_word.second) {
+			third_word = second_word;
+			second_word = first_word;
+			first_word = p;
+		}
+		else if (p.second > second_word.second) {
+			third_word = second_word;
+			second_word = p;
+		}
+		else if (p.second > third_word.second) {
+			third_word = p;
+		}
 	}
+
+	top3[0] = first_word;
+	top3[1] = second_word;
+	top3[2] = third_word;
+	return top3;
 
 }
 
