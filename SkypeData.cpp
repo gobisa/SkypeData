@@ -304,7 +304,7 @@ void SkypeUser::outputData(std::ofstream& output_file) {
 	output_file << "\",";
 	output_file << "\"";
 	for (const std::pair<string, int>& p : getTop3FromMap(vocabulary_count)) {
-		output_file << "\"" << p.first << " (" << p.second << ") ";
+		output_file << p.first << " (" << p.second << ") ";
 	}
 	output_file << "\"";
 	output_file << "\n";
