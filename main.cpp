@@ -1,14 +1,10 @@
 /*
 Analyzes a csv file of skype data found in main.db,
 extracted using SQLite.
-Calculates edit frequency, 
-positive and negative words, 
-total words, 
-number of curses,
-vocabulary (#unique words and average unique words per word)?????,
-punctuation (",.;:!?") [,.;:!?] //only count punctuation if it is preceded by a letter/number,
-number of links, (should probably be done first, because it can count the xml tags '<a href=""http'
-number of skype emojis
+Calculates edit frequency, word count, unique words,
+punctuation frequency, link frequency, emoji frequency, 
+negative and positive emotional word use, bad/dirty word use.
+Outputs data as csv.
 
 
 
