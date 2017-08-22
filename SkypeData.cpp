@@ -10,6 +10,7 @@
 //#include <iterator>
 //#include <regex.h>
 #include <sstream>
+#include <iomanip>
 
 using std::regex;
 
@@ -284,7 +285,13 @@ void SkypeUser::outputData(std::ofstream& output_file) {
 				<< "Top 3 Emojis (count), Top 3 Words (count)"
 				<< "\n";
 	*/
-	output_file << name << "," << num_posts << "," << num_edits << "," << num_posts / num_edits << "," << word_count << "," << vocab_size << ",";
+	if (num_edits != 0) {
+		output_file << name << "," << num_posts << "," << num_edits << "," << num_posts / num_edits << "," << word_count << "," << vocab_size << ",";
+	}
+	else {
+		output_file << name << "," << num_posts << "," << num_edits << "," << "undef." << "," << word_count << "," << vocab_size << ",";
+	}
+	
 	output_file << punctuation_count << "," << punctuation_count / num_posts << "," << link_count << ",";
 	output_file << link_count / num_posts << "," << skype_emoji_count << "," << skype_emoji_count / num_posts << ",";
 	output_file << negative_words_count << "," << positive_words_count << "," << bad_words_count << ",";
@@ -299,6 +306,7 @@ void SkypeUser::outputData(std::ofstream& output_file) {
 	}
 	output_file << "\"";
 	output_file << "\n";
+
 
 }
 
