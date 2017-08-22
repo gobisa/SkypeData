@@ -286,17 +286,17 @@ void SkypeUser::outputData(std::ofstream& output_file) {
 				<< "\n";
 	*/
 	if (num_edits != 0) {
-		output_file << name << "," << num_posts << "," << num_edits << "," << num_posts / num_edits << "," << word_count << "," << vocab_size << ",";
+		output_file << name << "," << num_posts << "," << num_edits << "," << num_posts / (double) num_edits << "," << word_count << "," << vocab_size << ",";
 	}
 	else {
 		output_file << name << "," << num_posts << "," << num_edits << "," << "undef." << "," << word_count << "," << vocab_size << ",";
 	}
 	
 	output_file << punctuation_count << "," << punctuation_count / num_posts << "," << link_count << ",";
-	output_file << link_count / num_posts << "," << skype_emoji_count << "," << skype_emoji_count / num_posts << ",";
+	output_file << link_count / (double) num_posts << "," << skype_emoji_count << "," << skype_emoji_count / (double) num_posts << ",";
 	output_file << negative_words_count << "," << positive_words_count << "," << bad_words_count << ",";
 	output_file << negative_message_count << "," << positive_message_count << "," << bad_word_message_count << ",";
-	output_file << negative_message_count / num_posts << "," << positive_message_count / num_posts << "," << bad_word_message_count / num_posts << ",";
+	output_file << negative_message_count / (double) num_posts << "," << positive_message_count / (double) num_posts << "," << bad_word_message_count / (double) num_posts << ",";
 	for (const std::pair<string, int>& p : getTop3FromMap(emoji_count)) {
 		output_file << "\"" << p.first << " (" << p.second << ") ";
 	}
