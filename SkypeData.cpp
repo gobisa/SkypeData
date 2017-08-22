@@ -147,10 +147,8 @@ void SkypeUser::sortData() {
 	*/
 
 	for (auto row : rows) {
-		//std::cout << "raw xml: " << row["replace(body_xml, CHAR(10), '')"] << std::endl;
 		raw_xml_messages.push_back(row["replace(body_xml, CHAR(10), '')"]);
 		string parsed_text = XMLToStringConverter(row["replace(body_xml, CHAR(10), '')"]);
-		//std::cout << "parsed_text: " << parsed_text << std::endl;
 		parsed_messages.push_back(parsed_text);
 		
 		if (row["edited_by"] == name) {
@@ -172,7 +170,7 @@ void SkypeUser::analyzeData(const set<string>& neg_words, const set<string>& pos
 
 	//vocabulary_count, word_count, punctuation_count, negative_message_count, positive_message_count, bad_word_message_count
 	for (const auto& msg : parsed_messages) {
-		std::cout << msg << std::endl;
+
 		//vocabulary_count, word_count
 		stringstream message(msg);
 		while (message >> word) {
@@ -275,7 +273,41 @@ void SkypeUser::analyzeData(const set<string>& neg_words, const set<string>& pos
 
 }
 
+void SkypeUser::outputData(std::ofstream& output_file) {
+	/*
+	output_file << "Name,Post Count,Edits Made,Edit Percentage,Word Count,Unique Words,"
+				<< "Punctuation Count,Average Punctuation per Message, Link Count,"
+				<< "Average Links per Message,Emoji Count,Average Emojis per Message,"
+				<< "Negative Word Count,Positive Word Count,Bad Word Count,"
+				<< "Negative Messages, Positive Messages, Messages with Bad Word,"
+				<< "Negative Message Frequency, Positive Message Frequency, Message with Bad Word Frequency"
+				<< "Top 3 Emojis, Top 3 Words"
+				<< "\n";
+	*/
+	output_file << name << "," << num_posts << "," << num_edits << "," << num_posts / num_edits << "," << word_count << "," << vocab_size << ",";
+	output_file << punctuation_count << "," << punctuation_count / num_posts << "," << link_count << ",";
+	output_file << link_count / num_posts << "," << skype_emoji_count << "," << skype_emoji_count / num_posts << ",";
+	output_file << negative_words_count << "," << positive_words_count << "," << bad_words_count << ",";
+	output_file << negative_message_count << "," << positive_message_count << "," << bad_word_message_count << ",";
+	output_file << negative_message_count / num_posts << "," << positive_message_count / num_posts << "," << bad_word_message_count / num_posts << ",";
+	
 
+}
+
+
+vector<string> getTop3FromMap(const map<string, int>& m) {
+
+	vector<string> top3(3);
+
+	std::pair<string, int> top1("", 0);
+	std::pair<string, int> top2("", 0);
+	std::pair<string, int> top3("", 0);
+
+	for (const std::pair<string, int>& p : m) {
+
+	}
+
+}
 
 
 /*
@@ -310,8 +342,6 @@ string SkypeUser::XMLToStringConverter(const string& xml) {
 
 	//FIXME, when message has a comma, it starts with quotes in the csv
 
-	//std::cout << "xml: " << xml << std::endl;
-
 	//no xml tags
 	//FIXME, MAY NEED TO UNREMOVE
 	//if (xml[0] != '"') return xml;
@@ -325,7 +355,6 @@ string SkypeUser::XMLToStringConverter(const string& xml) {
 
 	string plain_text_string = xml; //use this string to replace things
 
-	//std::cout << "plain_text_string declared" << std::endl;
 
 	/*
 	//http://www.cplusplus.com/reference/regex/
@@ -526,3 +555,5 @@ string SkypeUser::removePunctuation(const string& word) {
 	regex punct("^[[:punct:]]+|[[:punct:]]+$");
 	return regex_replace(word, punct, "");
 }
+
+
