@@ -1,5 +1,5 @@
 SkypeData
-===============
+-----------------
 
 ## Features
 ### Analyzes a csv file of skype data found in main.db, extracted using SQLite.
