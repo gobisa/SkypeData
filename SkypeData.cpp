@@ -7,8 +7,6 @@
 #include <string>
 #include <set>
 #include <regex>
-//#include <iterator>
-//#include <regex.h>
 #include <sstream>
 #include <iomanip>
 
@@ -31,22 +29,12 @@ void SkypeUser::addRow(csvstream::row_type row) {
 	rows.push_back(row);
 }
 
+/*
+REQUIRES:	nothing
+MODIFIES:	raw_xml_messages, parsed_messages, num_posts, num_edits
+EFFECTS:	fills in raw_xml_messages, parsed_messages, num_posts, num_edits based on csv data
+*/
 void SkypeUser::sortData() {
-	/*
-	vector<string> raw_xml_messages;
-	vector<string> parsed_messages;
-	int num_posts; // = rows.size();
-	int num_edits;
-
-	map<string, int> vocabulary_count; //unique word frequencies //use plain text
-	map<string, int> emoji_count; //unique emoji frequencies //should use xml
-	int word_count; //total words, non unique //use multiplication in vocabulary_count
-	int vocab_size; //number of unique words, = vocabulary_count.size()
-	int bad_words_count;
-	int punctuation_count;
-	int link_count;
-	int skype_emoji_count;
-	*/
 
 	for (auto row : rows) {
 		raw_xml_messages.push_back(row["replace(body_xml, CHAR(10), '')"]);
@@ -62,6 +50,11 @@ void SkypeUser::sortData() {
 	
 }
 
+/*
+REQUIRES:	neg_words, pos_words, and bad_words to be valid sets
+MODIFIES:	vocabulary_count, emoji_count, word_count, vocab_size, link_count, skype_emoji_count
+EFFECTS:	fills in vocabulary_count, emoji_count, word_count, vocab_size, link_count, skype_emoji_count
+*/
 void SkypeUser::analyzeData(const set<string>& neg_words, const set<string>& pos_words, const set<string>& bad_words) {
 
 	string word;
@@ -175,6 +168,11 @@ void SkypeUser::analyzeData(const set<string>& neg_words, const set<string>& pos
 
 }
 
+/*
+REQUIRES:	output_file is a valid ofstream
+MODIFIES:	output_file
+EFFECTS:	pushes analyzed data in csv format to output_file for exporting to a file
+*/
 void SkypeUser::outputData(std::ofstream& output_file) {
 	/*
 	output_file << "Name,Post Count,Edits Made,Edit Percentage,Word Count,Unique Words,"
@@ -186,11 +184,13 @@ void SkypeUser::outputData(std::ofstream& output_file) {
 				<< "Top 3 Emojis (count), Top 3 Words (count)"
 				<< "\n";
 	*/
+
+	//if/else needed to avoid divide by 0
 	if (num_edits != 0) {
 		output_file << name << "," << num_posts << "," << num_edits << "," << num_edits / (double) num_posts << "," << word_count << "," << vocab_size << ",";
 	}
 	else {
-		output_file << name << "," << num_posts << "," << num_edits << "," << "undef." << "," << word_count << "," << vocab_size << ",";
+		output_file << name << "," << num_posts << "," << num_edits << "," << "0" << "," << word_count << "," << vocab_size << ",";
 	}
 	
 	output_file << punctuation_count << "," << punctuation_count / (double) num_posts << "," << link_count << ",";
@@ -247,6 +247,10 @@ vector<std::pair<string, int>> SkypeUser::getTop3FromMap(const map<string, int>&
 
 
 /*
+REQUIRES:	xml is a valid string
+MODIFIES:	nothing
+EFFECTS:	returns a new string without any xml tags, but still has the xml special characters
+
 Skype xml formatting:
 -messages with xml formatting all begin with double quotes
 -if the message does not begin with double quotes,
@@ -262,12 +266,7 @@ SPECIAL CHARACTERS CAN BE DEALT WITH ONCE THE VOCAB TREES ARE ESTABLISHED
 -note: <URIObject type contains an href type, so search for URIObject first
 -URIObject is a file
 -note: for ss tag, record that user used an emoji and record what kind
--note: format for text with a link
-andrew.lukasiewicz,,"i came out of the womb singing this <a href=""https://www.youtube.com/watch?v=l7KEuKKuuas"">https://www.youtube.com/watch?v=l7KEuKKuuas</a>"
 */
-//THIS FUNCTION IS ONLY FOR CONVERTING THE STRING TO TEXT, OTHER ANALYSIS WILL BE DONE BY OTHER FUNCTIONS
-//THIS FUNCTION SHOULD PROBABLY ONLY BE USED FOR COMPUTING VOCABULARY AND WORDCOUNT
-//FIXME, NEW TAG: ajmatvekas,ajmatvekas,"My <b raw_pre=""*"" raw_post=""*"">intro</b> to excel teacher sucks so badly....he goes I don&apos;t even use excel after messing up showing us something lol"
 /*
 All tags found using python script:
 ['</i>', '<i r', '<b>W', '</s>', '<s r', '<br/', '<Des', '</De', '<b r', '</Ti', '<Tit', '</b>', '<Fil', '<quo', '</qu',
@@ -440,6 +439,9 @@ EFFECTS:	returns a string based on xml_word,
 			with all xml special characters replaced by their plain text characters
 */
 string SkypeUser::XMLSpecialCharToString(const string& xml_word) {
+
+	//FIXME, the nested loops could be replaced with regex_replace
+
 	vector<string> xml_special_chars = { "&lt;", "&amp;", "&gt;", "&quot;", "&apos;" };
 
 	string parsed_word = xml_word;
@@ -474,8 +476,9 @@ string SkypeUser::XMLSpecialCharToString(const string& xml_word) {
 
 
 /*
--Removes quotes that the user adds
--if there is a /, treat the string as two words
+-UNUSED, possible ideas for implementation:
+---Removes quotes that the user adds
+---if there is a /, treat the string as two words
 */
 string SkypeUser::personalTextFormatter(const string& unformatted_string) {
 	regex quote("\"");
@@ -484,11 +487,17 @@ string SkypeUser::personalTextFormatter(const string& unformatted_string) {
 }
 
 
-//removes any prefix or postfix punctuation
-//works correctly
+/*
+REQUIRES:	word is a valid string
+MODIFIES:	nothing
+EFFECTS:	returns a string based on word that has all prefix and postfix punctuation removed
+			EX: "hello!" becomes "hello", and "don't" stays as "don't"
+*/
 string SkypeUser::removePunctuation(const string& word) {
 	regex punct("^[[:punct:]]+|[[:punct:]]+$");
 	return regex_replace(word, punct, "");
 }
-
+////////////////////////////////////////
+////////UserData////////////////////////
+////////////////////////////////////////
 
