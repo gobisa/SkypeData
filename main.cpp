@@ -132,6 +132,7 @@ int main(int argc, char** argv) {
 
 			//analyze data
 			for (SkypeUser* user : skype_users) {
+				std::cout << "analyzing messages from " << user->getName() << "\n";
 				user->sortData();
 				user->analyzeData(negative_words, positive_words, bad_words);
 				user->outputData(output_file);
