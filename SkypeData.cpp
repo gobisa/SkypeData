@@ -174,6 +174,10 @@ MODIFIES:	output_file
 EFFECTS:	pushes analyzed data in csv format to output_file for exporting to a file
 */
 void SkypeUser::outputData(std::ofstream& output_file) {
+
+	//removes nonsense data
+	if (name == "") return;
+
 	/*
 	output_file << "Name,Post Count,Edits Made,Edit Percentage,Word Count,Unique Words,"
 				<< "Punctuation Count,Average Punctuation per Message, Link Count,"
