@@ -1,4 +1,0 @@
-﻿  main.cpp
-c:\users\andrius\documents\andrius\selfprojects\skypedata\skypedata\main.cpp(61): warning C4101: 'root_node': unreferenced local variable
-  SkypeData.vcxproj -> C:\Users\Andrius\Documents\Andrius\SelfProjects\SkypeData\Debug\SkypeData.exe
-  SkypeData.vcxproj -> C:\Users\Andrius\Documents\Andrius\SelfProjects\SkypeData\Debug\SkypeData.pdb (Partial PDB)
