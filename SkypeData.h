@@ -17,25 +17,6 @@ using std::set;
 using std::regex;
 using std::stringstream;
 
-class SkypeData {
-public:
-	SkypeData(csvstream& csv_data);
-private:
-	friend class SkypeUser;
-
-	//void update_users_num_posts();
-	//void update_users_num_edits();
-	void update_users_vocabulary_count();
-
-	//Modifies:	user_data
-	//Effects:	deletes every pointed-to objectin user_data
-	~SkypeData();
-
-	int posts_count;
-	vector<SkypeUser*> user_data; //stores data for each user
-	vector<csvstream::row_type> rows; //stores each row of the csv in a vector
-	set<string> user_names;
-};
 
 //each of these objects stores data by person
 //each person has their own object of this class

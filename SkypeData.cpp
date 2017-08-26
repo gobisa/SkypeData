@@ -15,105 +15,6 @@
 using std::regex;
 
 
-////////////////////////////////////////
-////////SkypeData///////////////////////
-////////////////////////////////////////
-/*
-REQUIRES: valid csv_data
-MODIFIES: 
-	SkypeData: posts_count, user_data, rows, user_names
-	UserSkypeData: name, rows
-EFFECTS:
-	SkypeData: updates posts_count to number of posts in the csv_data, creates a 
-		new UserSkypeData object for each unique author in csv_data, stores each unique
-		author in user_names, and stores all the rows of the csv_data in rows
-	UserSkypeData: for each user in SkypeData.user_data, sets the name, rows, 
-		num_posts, num_edits
-*/
-/*
-SkypeData::SkypeData(csvstream& csv_data) {
-	csvstream::row_type row;
-
-	//bool new_name;
-	int user_data_index = -1;
-
-	//read in all rows from csv_data, and temporarily store data in row
-	while (csv_data >> row) {
-		//returns pair, where second element is true if 
-		//element is a new element and is inserted
-		if ((user_names.insert(row["author"])).second) {
-			//create new user, sets name
-			user_data.push_back(new SkypeUser(row["author"]));
-			++user_data_index;
-		}
-		//add rows of csv_data to this.rows
-		rows.push_back(row);
-		//add rows of csv_data to correct UserSkypeData object
-		user_data[user_data_index]->rows.push_back(row);
-	}
-	//set posts_count
-	posts_count = rows.size();
-	
-
-
-
-	//update/initialize all users
-
-	//num_posts, num_edits, vocabulary_count, word_count, and vocab_size
-	for (auto user : user_data) {
-		//update num_posts
-		user->num_posts = (user->rows).size();
-
-		//go through every row
-		for (auto row : user->rows) {
-			//update num_edits
-			if (row["edited_by"] != "") {
-				//FIXME, may not work correctly
-				++(user->num_edits);
-			}
-		}
-	}
-
-}
-
-
-//FIXME
-//CURRENTLY ONLY UPDATES num_posts and num_edits
-//PROBABLY WANT IT TO UPDATE VOCAB AND VOCAB COUNTS
-void SkypeData::update_users_vocabulary_count() {
-
-	for (auto user : user_data) {
-		//update num_posts
-		user->num_posts = (user->rows).size();
-
-		//go through every row
-		for (auto row : user->rows) {
-			//update num_edits
-			if (row["edited_by"] != "") { //FIXME, MAY NEED TO CHECK IF == user->name?
-				//FIXME, may not work correctly
-				++(user->num_edits);
-			}
-
-
-			//FIXME
-			//UPDATE VOCAB
-		}
-	}
-
-}
-
-
-
-SkypeData::~SkypeData() {
-	for (auto ptr_datum : user_data) {
-		delete ptr_datum;
-	}
-}
-*/
-////////////////////////////////////////
-////////SkypeData///////////////////////
-////////////////////////////////////////
-
 
 
 
@@ -532,12 +433,11 @@ string SkypeUser::XMLToStringConverter(const string& xml) {
 
 
 
-//FIXME, WRITE TEST CASES, this doesnt work
 /*
 REQUIRES:	xml_word is a single word, with no spaces
 MODIFIES:	nothing
 EFFECTS:	returns a string based on xml_word,
-with all xml special characters replaced by their plain text characters
+			with all xml special characters replaced by their plain text characters
 */
 string SkypeUser::XMLSpecialCharToString(const string& xml_word) {
 	vector<string> xml_special_chars = { "&lt;", "&amp;", "&gt;", "&quot;", "&apos;" };
@@ -571,7 +471,7 @@ string SkypeUser::XMLSpecialCharToString(const string& xml_word) {
 
 	return parsed_word;
 }
-//remove this in vocab count
+
 
 /*
 -Removes quotes that the user adds
