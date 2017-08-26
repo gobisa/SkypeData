@@ -34,6 +34,7 @@ public:
 	string personalTextFormatter(const string& unformatted_string);
 	string removePunctuation(const string& text);
 	vector<std::pair<string, int>> getTop3FromMap(const map<string, int>& m);
+	string getName() { return name; }
 
 private:
 
