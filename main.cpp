@@ -44,8 +44,6 @@ using std::regex_replace;
 using std::stringstream;
 using std::getline;
 
-//http://www.sqlapi.com/ use this to get sql into this program so that only the .db file has to be used
-//https://www.tutorialspoint.com/sqlite/sqlite_c_cpp.htm THIS ONE LOOKS BETTER
 
 
 void test_XMLToStringConverter();
